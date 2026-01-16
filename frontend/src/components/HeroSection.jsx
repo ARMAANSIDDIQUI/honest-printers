@@ -93,7 +93,7 @@ export function HeroSection() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="relative hidden lg:block"
             >
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 transition-colors">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 transition-colors watermarked">
                 <div className="absolute inset-0 bg-slate-100 dark:bg-slate-900" />
                 <img
                   src="https://images.unsplash.com/photo-1562564055-71e051d33c19?w=800&q=80"

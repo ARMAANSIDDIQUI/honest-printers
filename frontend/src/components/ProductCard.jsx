@@ -45,7 +45,7 @@ export function ProductCard({ product, index = 0 }) {
       className="group bg-white dark:bg-slate-900/40 backdrop-blur-sm rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500"
     >
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
+        <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900 watermarked">
           <img
             src={product.thumbnail}
             alt={product.name}

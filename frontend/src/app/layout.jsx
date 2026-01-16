@@ -2,6 +2,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/lib/redux/provider";
 import { Toaster } from "sonner";
+import ClientProtection from "@/components/ClientProtection";
 
 export const metadata = {
   title: "Honest Printers | Digital, Screen & Offset Printing Services",
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
+        <ClientProtection />
         <ReduxProvider>
           <ThemeProvider
             attribute="class"

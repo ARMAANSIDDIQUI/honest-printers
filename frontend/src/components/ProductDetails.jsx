@@ -78,7 +78,7 @@ export function ProductDetails({ product }) {
       <div className="space-y-6">
         <motion.div 
           layoutId={`main-image-${product.id}`}
-          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 watermarked"
         >
           <img 
             src={activeImage} 
@@ -97,7 +97,7 @@ export function ProductDetails({ product }) {
             <button
               key={idx}
               onClick={() => setActiveImage(img)}
-              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-indigo-600 ring-2 ring-indigo-600/20' : 'border-transparent hover:border-slate-300 dark:hover:border-slate-700'}`}
+              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all watermarked ${activeImage === img ? 'border-indigo-600 ring-2 ring-indigo-600/20' : 'border-transparent hover:border-slate-300 dark:hover:border-slate-700'}`}
             >
               <img src={img} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
             </button>

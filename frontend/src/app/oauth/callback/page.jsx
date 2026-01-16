@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { loginSuccess, loginFailure } from "@/lib/redux/slices/userSlice";
@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 
-export default function OAuthCallbackPage() {
+function OAuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -44,11 +44,24 @@ export default function OAuthCallbackPage() {
   }, [token, dispatch, router]);
 
   return (
+    <div className="flex flex-col items-center gap-4">
+      <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      <p className="text-slate-600 dark:text-slate-400">Authenticating...</p>
+    </div>
+  );
+}
+
+export default function OAuthCallbackPage() {
+  return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        <p className="text-slate-600 dark:text-slate-400">Authenticating...</p>
-      </div>
+      <Suspense fallback={
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
+        </div>
+      }>
+        <OAuthCallbackContent />
+      </Suspense>
     </div>
   );
 }
