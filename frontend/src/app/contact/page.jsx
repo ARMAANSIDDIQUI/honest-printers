@@ -61,8 +61,8 @@ export default function ContactPage() {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-slate-900 dark:text-white">Call Us</h3>
-                                <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 mb-2">Mon-Fri from 9am to 6pm IST.</p>
-                                <a href="tel:+911234567890" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">+91 123 456 7890</a>
+                                <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 mb-2">Minhaj Aslam (Manager)</p>
+                                <a href="tel:9412247786" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">+91 9412247786</a>
                             </div>
                         </div>
 
@@ -71,15 +71,27 @@ export default function ContactPage() {
                                 <MapPin className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                             </div>
                             <div>
-                                <h3 className="font-semibold text-slate-900 dark:text-white">Office</h3>
+                                <h3 className="font-semibold text-slate-900 dark:text-white">Reach Us</h3>
                                 <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
-                                    Honest Graphics HQ<br />
-                                    123 Creative Tower, Andheri West<br />
-                                    Mumbai, Maharashtra 400053<br />
-                                    India
+                                    Honest Printers<br />
+                                    Ghass Mandi, Bazar Ganj, Opp Bank Of Baroda,<br />
+                                    Moradabad-244001, Uttar Pradesh, India
                                 </p>
+                                <a href="https://maps.app.goo.gl/eCo5G3o4pyZhEAmA8" target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-600 mt-2 block hover:underline">Get Directions</a>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div className="mt-8 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 h-64">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3494.9517299544336!2d78.77053597550844!3d28.840297075551835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390afbc3ab2acc8d%3A0xf2588bfcecfb516!2sHonest%20Printers!5e0!3m2!1sen!2sin!4v1768570630745!5m2!1sen!2sin" 
+                            width="100%" 
+                            height="100%" 
+                            style={{border:0}} 
+                            allowFullScreen="" 
+                            loading="lazy" 
+                            referrerPolicy="no-referrer-when-downgrade"
+                        ></iframe>
                     </div>
                 </div>
 

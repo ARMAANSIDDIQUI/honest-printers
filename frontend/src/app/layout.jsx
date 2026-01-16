@@ -3,8 +3,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/lib/redux/provider";
 
 export const metadata = {
-  title: "Honest Graphics & Printers | Premium Design Templates",
-  description: "Professional graphic design templates for creative professionals. Download premium business cards, brochures, flyers, and social media templates in Photoshop, Illustrator, CorelDRAW, and InDesign formats.",
+  title: "Honest Printers | Digital, Screen & Offset Printing Services",
+  description: "Honest Printers - Leading service provider of digital printing, screen printing, and offset printing in Moradabad, Uttar Pradesh. Manufacturer of office stationery, visiting cards, stickers, and more. GST: 09AGKPA5713C1ZT.",
   icons: {
     icon: '/favicon.jpg',
   },
