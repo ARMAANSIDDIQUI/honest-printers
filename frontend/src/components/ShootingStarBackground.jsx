@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const STAR_COUNT = 80;
+const STAR_COUNT = 250;
 
 export function ShootingStarBackground() {
   const [mounted, setMounted] = useState(false);
@@ -21,12 +21,15 @@ export function ShootingStarBackground() {
     const generateStars = () => {
       const newStars = [];
       for (let i = 0; i < STAR_COUNT; i++) {
+        const initialLeft = `${Math.random() * 150 - 50}vw`; // From -50vw to 100vw
+        const initialTop = `${Math.random() * 150 - 50}vh`;   // From -50vh to 100vh
+
         newStars.push({
           id: i,
-          top: `${Math.random() * 100}vh`,
-          left: `${Math.random() * 100}vw`,
-          animationDelay: `${Math.random() * 10}s`,
-          animationDuration: `${10 + Math.random() * 10}s`, // 10 to 20 seconds
+          top: initialTop,
+          left: initialLeft,
+          animationDelay: `${Math.random() * 10}s`, // Smaller delay range for more frequent appearance
+          animationDuration: `${10 + Math.random() * 15}s`, // Increase duration range (10 to 25s)
         });
       }
       setStars(newStars);

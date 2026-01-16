@@ -161,39 +161,41 @@
 /* Shooting Star Styles */
 .shooting-star {
   position: absolute;
-  height: 2px;
-  background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
-  filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
-  animation-name: shooting, tail;
+  width: 2px; /* Start with star head size */
+  height: 2px; /* Thin line */
+  background: linear-gradient(0deg, rgba(60, 100, 200, 1) 0%, rgba(60, 100, 200, 1) 25%, rgba(60, 100, 200, 0.05) 50%, rgba(60, 100, 200, 0) 100%); /* Darker blue, thicker head, thinner tail */
+  filter: drop-shadow(0 0 10px rgba(70, 110, 210, 1)); /* Darker bolder glow */
+  animation-name: shooting, trail; /* Reintroduce trail animation */
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
   z-index: 1; /* Ensure stars are above the background gradient */
+  transform-origin: 100% 50%; /* Anchor trail growth to the head */
 }
 
 @keyframes shooting {
   0% {
-    transform: translateX(0) translateY(0);
+    transform: translateX(0) translateY(0) rotate(66.8deg); /* Apply rotation here */
     opacity: 0;
   }
   50% {
     opacity: 1;
   }
   100% {
-    transform: translateX(150vw) translateY(150vh);
+    transform: translateX(75vw) translateY(175vh) rotate(66.8deg); /* Apply rotation here */
     opacity: 0;
   }
 }
 
-@keyframes tail {
+@keyframes trail {
   0% {
-    width: 0;
+    width: 2px; /* Star head size (height) */
   }
-  50% {
-    width: 250px;
+  25% {
+    width: 150px; /* Increased trail length */
   }
   100% {
-    width: 0;
+    width: 2px; /* End with star head size */
   }
 }
 
