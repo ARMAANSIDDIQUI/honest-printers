@@ -41,7 +41,7 @@ export default function AboutPage() {
         {/* Stats Grid */}
         <div className="border-y border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm mb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
                     <div className="text-center">
                         <div className="text-xl lg:text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">Manufacturer</div>
                         <div className="text-sm font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">Nature of Business</div>
@@ -49,10 +49,6 @@ export default function AboutPage() {
                     <div className="text-center">
                         <div className="text-xl lg:text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">Proprietorship</div>
                         <div className="text-sm font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">Legal Status</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-xl lg:text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">0 - 40 L</div>
-                        <div className="text-sm font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">Annual Turnover</div>
                     </div>
                     <div className="text-center">
                         <div className="text-xl lg:text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">09AGKPA5713C1ZT</div>

@@ -1,6 +1,7 @@
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/lib/redux/provider";
+import { Toaster } from "sonner";
 
 export const metadata = {
   title: "Honest Printers | Digital, Screen & Offset Printing Services",
@@ -25,6 +26,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster richColors closeButton position="top-center" />
           </ThemeProvider>
         </ReduxProvider>
       </body>

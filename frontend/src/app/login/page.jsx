@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
 
-import { Mail, Lock, User, Loader2, Phone, MapPin, Camera } from "lucide-react";
+import { Mail, Lock, User, Loader2, Phone, MapPin, Camera, Eye, EyeOff } from "lucide-react";
 
 import { FaGoogle } from "react-icons/fa";
 
@@ -31,6 +31,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 import api from "@/lib/api";
+
+import Link from "next/link";
 
 
 
@@ -64,6 +66,10 @@ export default function LoginPage() {
 
   const [uploading, setUploading] = useState(false);
 
+  const [showLoginPass, setShowLoginPass] = useState(false);
+
+  const [showRegisterPass, setShowRegisterPass] = useState(false);
+
 
 
   const handleGoogleLogin = () => {
@@ -71,6 +77,8 @@ export default function LoginPage() {
     window.location.href = "http://localhost:5000/api/auth/google";
 
   };
+
+
 
 
 
@@ -320,41 +328,57 @@ export default function LoginPage() {
 
                                 </div>
 
-                                <div className="space-y-2">
+                                                                <div className="space-y-2">
 
-                                    <div className="flex items-center justify-between">
+                                                                    <div className="flex items-center justify-between">
 
-                                        <Label htmlFor="password">Password</Label>
+                                                                        <Label htmlFor="password">Password</Label>
 
-                                        <a href="#" className="text-xs text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                                                                        <Link href="/forgot-password" className="text-xs text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
 
-                                    </div>
+                                                                    </div>
 
-                                    <div className="relative">
+                                                                    <div className="relative">
 
-                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
 
-                                        <Input 
+                                                                        <Input 
 
-                                            id="password" 
+                                                                            id="password" 
 
-                                            type="password" 
+                                                                            type={showLoginPass ? "text" : "password"} 
 
-                                            placeholder="••••••••" 
+                                                                            placeholder="••••••••" 
 
-                                            className="pl-9" 
+                                                                            className="pl-9 pr-10" 
 
-                                            required 
+                                                                            required 
 
-                                            value={loginData.password}
+                                                                            value={loginData.password}
 
-                                            onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                                                            onChange={(e) => setLoginData({...loginData, password: e.target.value})}
 
-                                        />
+                                                                        />
 
-                                    </div>
+                                                                        <button 
 
-                                </div>
+                                                                            type="button"
+
+                                                                            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+
+                                                                            onClick={() => setShowLoginPass(!showLoginPass)}
+
+                                                                        >
+
+                                                                            {showLoginPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+
+                                                                        </button>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                
 
                                 <Button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
 
@@ -494,27 +518,49 @@ export default function LoginPage() {
 
                                 </div>
 
-                                <div className="space-y-2">
+                                                                <div className="space-y-2">
 
-                                    <Label htmlFor="register-password">Password</Label>
+                                                                    <Label htmlFor="register-password">Password</Label>
 
-                                    <Input 
+                                                                    <div className="relative">
 
-                                        id="register-password" 
+                                                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
 
-                                        type="password" 
+                                                                        <Input 
 
-                                        placeholder="Create a password" 
+                                                                            id="register-password" 
 
-                                        required 
+                                                                            type={showRegisterPass ? "text" : "password"}
 
-                                        value={registerData.password}
+                                                                            placeholder="Create a password" 
 
-                                        onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                                                                            className="pl-9 pr-10" 
 
-                                    />
+                                                                            required 
 
-                                </div>
+                                                                            value={registerData.password}
+
+                                                                            onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+
+                                                                        />
+
+                                                                        <button 
+
+                                                                            type="button"
+
+                                                                            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+
+                                                                            onClick={() => setShowRegisterPass(!showRegisterPass)}
+
+                                                                        >
+
+                                                                            {showRegisterPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+
+                                                                        </button>
+
+                                                                    </div>
+
+                                                                </div>
 
                                 <Button type="submit" disabled={loading || uploading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
 

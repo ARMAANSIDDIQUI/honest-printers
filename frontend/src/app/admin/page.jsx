@@ -1,50 +1,77 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, DollarSign, ShoppingBag, Users, Activity } from "lucide-react";
+import { ArrowUpRight, DollarSign, ShoppingBag, Users, Activity, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPrice } from "@/lib/data/products";
-
-const stats = [
-  {
-    label: "Total Revenue",
-    value: "₹45,231.89",
-    change: "+20.1%",
-    icon: DollarSign,
-    trend: "up"
-  },
-  {
-    label: "Active Subscriptions",
-    value: "+2350",
-    change: "+180.1%",
-    icon: Users,
-    trend: "up"
-  },
-  {
-    label: "Sales",
-    value: "+12,234",
-    change: "+19%",
-    icon: ShoppingBag,
-    trend: "up"
-  },
-  {
-    label: "Active Now",
-    value: "+573",
-    change: "+201",
-    icon: Activity,
-    trend: "up"
-  }
-];
-
-const recentSales = [
-    { name: "Olivia Martin", email: "olivia.martin@email.com", amount: 1999.00 },
-    { name: "Jackson Lee", email: "jackson.lee@email.com", amount: 39.00 },
-    { name: "Isabella Nguyen", email: "isabella.nguyen@email.com", amount: 299.00 },
-    { name: "William Kim", email: "will@email.com", amount: 99.00 },
-    { name: "Sofia Davis", email: "sofia.davis@email.com", amount: 39.00 }
-];
+import api from "@/lib/api";
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState([
+    { label: "Total Revenue", value: "₹0", change: "+0%", icon: DollarSign, trend: "neutral" },
+    { label: "Total Customers", value: "0", change: "+0%", icon: Users, trend: "neutral" },
+    { label: "Total Orders", value: "0", change: "+0%", icon: ShoppingBag, trend: "neutral" },
+    { label: "Total Products", value: "0", change: "+0%", icon: Activity, trend: "neutral" }
+  ]);
+  const [recentSales, setRecentSales] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ordersRes, usersRes, productsRes] = await Promise.all([
+          api.get('/orders'),
+          api.get('/users'),
+          api.get('/products')
+        ]);
+
+        const orders = ordersRes.data;
+        const users = usersRes.data;
+        const products = productsRes.data.products;
+
+        // Calculate Stats
+        const totalRevenue = orders.reduce((acc, order) => acc + (order.isPaid ? order.totalPrice : 0), 0);
+        const totalCustomers = users.length;
+        const totalOrders = orders.length;
+        const totalProducts = products.length;
+
+        // Recent Sales (Last 5 paid orders)
+        const recent = orders
+          .filter(o => o.isPaid)
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 5)
+          .map(o => ({
+            name: o.user?.name || "Guest",
+            email: o.user?.email || "N/A",
+            amount: o.totalPrice
+          }));
+
+        setStats([
+          { label: "Total Revenue", value: formatPrice(totalRevenue), change: "+100%", icon: DollarSign, trend: "up" },
+          { label: "Total Customers", value: totalCustomers.toString(), change: `+${users.length}`, icon: Users, trend: "up" },
+          { label: "Total Orders", value: totalOrders.toString(), change: `+${orders.length}`, icon: ShoppingBag, trend: "up" },
+          { label: "Total Products", value: totalProducts.toString(), change: `+${products.length}`, icon: Activity, trend: "up" }
+        ]);
+        setRecentSales(recent);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+        <div className="h-96 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       {/* Stats Grid */}
@@ -69,7 +96,7 @@ export default function AdminDashboard() {
                             <span className="text-green-500 font-medium flex items-center">
                                 {stat.change} <ArrowUpRight className="w-3 h-3 ml-0.5" />
                             </span>
-                            from last month
+                            overview
                         </p>
                     </CardContent>
                 </Card>
@@ -86,7 +113,7 @@ export default function AdminDashboard() {
             <CardContent className="pl-2">
                 <div className="h-[350px] w-full bg-slate-100 dark:bg-slate-800/50 rounded-lg flex items-center justify-center text-slate-400">
                     <Activity className="w-8 h-8 mr-2" />
-                    Chart Area
+                    Chart Area (Coming Soon)
                 </div>
             </CardContent>
         </Card>
@@ -96,27 +123,31 @@ export default function AdminDashboard() {
             <CardHeader>
                 <CardTitle>Recent Sales</CardTitle>
                 <p className="text-sm text-slate-500">
-                    You made 265 sales this month.
+                    Latest transactions from your store.
                 </p>
             </CardHeader>
             <CardContent>
                 <div className="space-y-8">
-                    {recentSales.map((sale, i) => (
-                        <div key={i} className="flex items-center">
-                            <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                                    {sale.name.charAt(0)}
-                                </span>
+                    {recentSales.length === 0 ? (
+                        <p className="text-slate-500 text-sm">No sales yet.</p>
+                    ) : (
+                        recentSales.map((sale, i) => (
+                            <div key={i} className="flex items-center">
+                                <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                                        {sale.name.charAt(0)}
+                                    </span>
+                                </div>
+                                <div className="ml-4 space-y-1">
+                                    <p className="text-sm font-medium leading-none text-slate-900 dark:text-white">{sale.name}</p>
+                                    <p className="text-sm text-slate-500">{sale.email}</p>
+                                </div>
+                                <div className="ml-auto font-medium text-slate-900 dark:text-white">
+                                    +{formatPrice(sale.amount)}
+                                </div>
                             </div>
-                            <div className="ml-4 space-y-1">
-                                <p className="text-sm font-medium leading-none text-slate-900 dark:text-white">{sale.name}</p>
-                                <p className="text-sm text-slate-500">{sale.email}</p>
-                            </div>
-                            <div className="ml-auto font-medium text-slate-900 dark:text-white">
-                                +₹{sale.amount}
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </CardContent>
         </Card>
