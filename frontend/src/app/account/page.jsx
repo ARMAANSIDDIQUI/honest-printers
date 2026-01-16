@@ -33,6 +33,7 @@ export default function AccountPage() {
     phoneNumber: "",
     countryCode: "+91",
     avatar: "",
+    address: "",
     password: "", 
     newPassword: "" 
   });
@@ -52,6 +53,7 @@ export default function AccountPage() {
             phoneNumber: user.phoneNumber || "",
             countryCode: user.countryCode || "+91",
             avatar: user.avatar || "",
+            address: user.address || "",
             password: "",
             newPassword: ""
         });
@@ -108,7 +110,8 @@ export default function AccountPage() {
               name: formData.name,
               phoneNumber: formData.phoneNumber,
               countryCode: formData.countryCode,
-              avatar: formData.avatar
+              avatar: formData.avatar,
+              address: formData.address
           };
 
           if (formData.newPassword) {
@@ -390,6 +393,15 @@ export default function AccountPage() {
                                                 onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} 
                                             />
                                         </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="address">Address</Label>
+                                        <Input 
+                                            id="address" 
+                                            placeholder="123 Main St, City, State, Zip"
+                                            value={formData.address}
+                                            onChange={(e) => setFormData({...formData, address: e.target.value})}
+                                        />
                                     </div>
                                 </div>
                             </div>

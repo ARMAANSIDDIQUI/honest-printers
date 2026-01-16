@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '+91' // Default to India, but can be changed
   },
+  address: {
+    type: String,
+    default: ''
+  },
   role: {
     type: String,
     enum: ['customer', 'admin'],
@@ -53,22 +57,15 @@ const userSchema = new mongoose.Schema({
 });
 
 // Encrypt password using bcrypt
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
   if (!this.isModified('password')) {
-    return next();
+    return;
   }
 
   // Only hash if password exists (skip for Google Auth users)
   if (this.password) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
-      next();
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
   }
 });
 

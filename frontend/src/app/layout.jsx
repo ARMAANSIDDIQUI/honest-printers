@@ -4,7 +4,8 @@ import { ReduxProvider } from "@/lib/redux/provider";
 
 export const metadata = {
   title: "Honest Printers | Digital, Screen & Offset Printing Services",
-  description: "Honest Printers - Leading service provider of digital printing, screen printing, and offset printing in Moradabad, Uttar Pradesh. Manufacturer of office stationery, visiting cards, stickers, and more. GST: 09AGKPA5713C1ZT.",
+  description: "Honest Printers in Moradabad offers premium printing services: Flex Banners, Flyers, Posters, Visiting Cards, Envelopes, Calendars, Stickers, Bill Books, and Custom Graphic Design. Manufacturer of high-quality office stationery and marketing materials.",
+  keywords: "Honest Printers, Moradabad printing, Flex printing, Vinyl printing, Visiting cards, Business cards, Flyers, Posters, Envelopes, Calendars, Bill books, Letterheads, Sticker printing, Offset printing, Screen printing, Digital printing, Custom graphic design, Wedding cards",
   icons: {
     icon: '/favicon.jpg',
   },

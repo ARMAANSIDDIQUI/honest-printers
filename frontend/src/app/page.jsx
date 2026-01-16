@@ -3,6 +3,7 @@ import { StarryBackground } from "@/components/StarryBackground";
 import { HeroSection } from "@/components/HeroSection";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
 import { CategoriesSection } from "@/components/CategoriesSection";
+import { CustomDesignCTA } from "@/components/CustomDesignCTA";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <HeroSection />
         <FeaturedProducts />
         <CategoriesSection />
+        <CustomDesignCTA />
       </main>
       <Footer />
     </div>

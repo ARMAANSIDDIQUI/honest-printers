@@ -51,7 +51,7 @@ export default function ContactPage() {
                             <div>
                                 <h3 className="font-semibold text-slate-900 dark:text-white">Email Us</h3>
                                 <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 mb-2">For general inquiries and support.</p>
-                                <a href="mailto:support@honestgraphics.com" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">support@honestgraphics.com</a>
+                                <a href="mailto:honestgraphicsandprinters@gmail.com" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">honestgraphicsandprinters@gmail.com</a>
                             </div>
                         </div>
 

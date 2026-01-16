@@ -69,18 +69,33 @@ export function Footer() {
                 Instant downloads with lifetime access and commercial licenses.
               </p>
               <div className="space-y-3">
-                <a href="mailto:support@honestgraphics.com" className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
+                <a href="mailto:honestgraphicsandprinters@gmail.com" className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
                   <Mail className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-                  support@honestgraphics.com
+                  honestgraphicsandprinters@gmail.com
                 </a>
-                <a href="tel:+911234567890" className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
+                <a href="tel:9412247786" className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
                   <Phone className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-                  +91 123 456 7890
+                  +91 9412247786
                 </a>
-                <p className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400 transition-colors">
-                  <MapPin className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-                  Mumbai, India
+                <p className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400 transition-colors">
+                  <MapPin className="w-4 h-4 text-indigo-500 dark:text-indigo-400 mt-1 flex-shrink-0" />
+                  <span>
+                    Ghass Mandi, Bazar Ganj,<br/>
+                    Opp Bank Of Baroda,<br/>
+                    Moradabad-244001, UP
+                  </span>
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 h-32 w-full">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3494.9517299544336!2d78.77053597550844!3d28.840297075551835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390afbc3ab2acc8d%3A0xf2588bfcecfb516!2sHonest%20Printers!5e0!3m2!1sen!2sin!4v1768570630745!5m2!1sen!2sin" 
+                        width="100%" 
+                        height="100%" 
+                        style={{border:0}} 
+                        allowFullScreen="" 
+                        loading="lazy" 
+                        referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                </div>
               </div>
             </div>
 

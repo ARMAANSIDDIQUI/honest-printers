@@ -41,12 +41,28 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  --animate-gradient-xy: gradient-xy 3s ease infinite;
+  
+  @keyframes gradient-xy {
+    0%, 100% {
+      background-size: 200% 200%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: right center;
+    }
+  }
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.985 0.005 240);
   --foreground: oklch(0.145 0 0);
+  /* Add subtle background pattern for light mode */
+  background-image: radial-gradient(oklch(0.92 0.01 240) 1px, transparent 1px);
+  background-size: 24px 24px;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);

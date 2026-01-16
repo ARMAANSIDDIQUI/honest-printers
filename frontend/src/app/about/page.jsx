@@ -32,7 +32,8 @@ export default function AboutPage() {
                 </h1>
                 <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                     Service Provider of digital printing services, screen printing & offset printing in Moradabad, Uttar Pradesh.
-                    Our main business is print but we also provide custom graphics, design, print courier services, and more.
+                    We are your one-stop shop for <strong>Flex Banners, Flyers, Posters, Visiting Cards, Envelopes, Calendars, Stickers, and Custom Graphic Design</strong>. 
+                    Whether you need marketing materials or office stationery, we deliver quality and precision.
                 </p>
             </motion.div>
         </div>

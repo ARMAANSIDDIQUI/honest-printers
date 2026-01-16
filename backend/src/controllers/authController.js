@@ -15,7 +15,7 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res) => {
-  const { name, email, password, phoneNumber, countryCode, avatar } = req.body;
+  const { name, email, password, phoneNumber, countryCode, avatar, address } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -31,7 +31,8 @@ exports.register = asyncHandler(async (req, res) => {
     password,
     phoneNumber,
     countryCode,
-    avatar
+    avatar,
+    address
   });
 
   if (user) {
@@ -61,6 +62,7 @@ exports.register = asyncHandler(async (req, res) => {
       avatar: user.avatar,
       phoneNumber: user.phoneNumber,
       countryCode: user.countryCode,
+      address: user.address,
       token,
     });
   } else {
@@ -87,6 +89,7 @@ exports.login = asyncHandler(async (req, res) => {
       avatar: user.avatar,
       phoneNumber: user.phoneNumber,
       countryCode: user.countryCode,
+      address: user.address,
       token: generateToken(user._id),
     });
   } else {
@@ -109,6 +112,7 @@ exports.getMe = asyncHandler(async (req, res) => {
     avatar: user.avatar,
     phoneNumber: user.phoneNumber,
     countryCode: user.countryCode,
+    address: user.address,
   });
 });
 
@@ -123,6 +127,7 @@ exports.updateProfile = asyncHandler(async (req, res) => {
     user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     user.countryCode = req.body.countryCode || user.countryCode;
     user.avatar = req.body.avatar || user.avatar;
+    user.address = req.body.address || user.address;
     
     if (req.body.password) {
       user.password = req.body.password;
@@ -138,6 +143,7 @@ exports.updateProfile = asyncHandler(async (req, res) => {
       avatar: updatedUser.avatar,
       phoneNumber: updatedUser.phoneNumber,
       countryCode: updatedUser.countryCode,
+      address: updatedUser.address,
       token: generateToken(updatedUser._id),
     });
   } else {

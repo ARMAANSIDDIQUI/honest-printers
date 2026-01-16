@@ -119,7 +119,7 @@ export function StarryBackground() {
           style={{
             background: isDark 
               ? "radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0) 0%, rgba(2, 6, 23, 0.5) 100%), radial-gradient(circle at 20% 20%, rgba(30, 41, 59, 0.4) 0%, transparent 40%)"
-              : "radial-gradient(circle at 50% 50%, rgba(248, 250, 252, 0) 0%, rgba(241, 245, 249, 0.5) 100%)"
+              : "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(240, 240, 255, 0.8) 100%), radial-gradient(circle at 80% 20%, rgba(230, 230, 250, 0.5) 0%, transparent 50%)"
           }}
         />
       
@@ -129,12 +129,13 @@ export function StarryBackground() {
           x={star.x}
           y={star.y}
           size={star.size}
-          opacity={star.opacity}
+          opacity={isDark ? star.opacity : star.opacity * 0.6} // Slightly subtle stars in light mode
           delay={star.delay}
           duration={star.duration}
         />
       ))}
       
+      {/* Show shooting stars in light mode too but fainter? No, keeping distinct. Maybe add subtle floating particles for light mode instead? For now let's keep shooting stars dark mode exclusive or make them very dark in light mode. Let's just keep them dark mode specific as per original design constraints, but improve the background gradient above. */}
       {isDark && shootingStars.map((star) => (
         <ShootingStar
           key={star.id}
