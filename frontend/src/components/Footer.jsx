@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { PRODUCT_CATEGORIES } from "@/lib/data/products";
+import api from "@/lib/api";
 
 const socialLinks = [
   { icon: FaFacebookF, href: "#", label: "Facebook" },
@@ -12,29 +13,41 @@ const socialLinks = [
   { icon: FaLinkedinIn, href: "#", label: "LinkedIn" }
 ];
 
-const footerLinks = {
-  products: PRODUCT_CATEGORIES.slice(0, 5),
-  company: [
+const companyLinks = [
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
     { name: "Careers", href: "/careers" },
     { name: "Blog", href: "/blog" }
-  ],
-  support: [
+];
+
+const supportLinks = [
     { name: "Help Center", href: "/help" },
     { name: "License Terms", href: "/license" },
     { name: "Refund Policy", href: "/refunds" },
     { name: "FAQ", href: "/faq" }
-  ],
-  legal: [
+];
+
+const legalLinks = [
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms of Service", href: "/terms" },
     { name: "Cookie Policy", href: "/cookies" }
-  ]
-};
+];
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await api.get('/categories');
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <footer className="bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-900 transition-colors">
@@ -74,8 +87,8 @@ export function Footer() {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-4 transition-colors">Categories</h3>
               <ul className="space-y-3">
-                {footerLinks.products.map((category) => (
-                  <li key={category.id}>
+                {categories.slice(0, 5).map((category) => (
+                  <li key={category._id}>
                     <Link href={`/products?category=${category.slug}`} className="text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
                       {category.name}
                     </Link>
@@ -87,7 +100,7 @@ export function Footer() {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-4 transition-colors">Company</h3>
               <ul className="space-y-3">
-                {footerLinks.company.map((link) => (
+                {companyLinks.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className="text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
                       {link.name}
@@ -100,7 +113,7 @@ export function Footer() {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-4 transition-colors">Support</h3>
               <ul className="space-y-3">
-                {footerLinks.support.map((link) => (
+                {supportLinks.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className="text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
                       {link.name}
@@ -113,7 +126,7 @@ export function Footer() {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-4 transition-colors">Legal</h3>
               <ul className="space-y-3">
-                {footerLinks.legal.map((link) => (
+                {legalLinks.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className="text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
                       {link.name}

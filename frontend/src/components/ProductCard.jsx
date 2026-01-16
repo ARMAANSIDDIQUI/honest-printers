@@ -23,12 +23,18 @@ function SoftwareBadge({ softwareId }) {
 }
 
 export function ProductCard({ product, index = 0 }) {
-  const lowestVariant = product.variants.reduce((lowest, variant) => 
-    variant.price < lowest.price ? variant : lowest
-  , product.variants[0]);
+  // Backend returns variants array. Ensure it exists.
+  const variants = product.variants || [];
   
-  const discount = Math.round((1 - lowestVariant.price / lowestVariant.originalPrice) * 100);
-  const uniqueSoftwares = [...new Set(product.variants.map(v => v.softwareId))];
+  const lowestVariant = variants.reduce((lowest, variant) => 
+    variant.price < lowest.price ? variant : lowest
+  , variants[0] || { price: 0, originalPrice: 0 });
+  
+  const discount = lowestVariant.originalPrice > 0 
+    ? Math.round((1 - lowestVariant.price / lowestVariant.originalPrice) * 100)
+    : 0;
+
+  const uniqueSoftwares = [...new Set(variants.map(v => v.softwareId))];
   
   return (
     <motion.article
@@ -99,7 +105,7 @@ export function ProductCard({ product, index = 0 }) {
               )}
             </div>
             <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 transition-colors">
-              {product.variants.length} Variants
+              {variants.length} Variants
             </span>
           </div>
         </div>

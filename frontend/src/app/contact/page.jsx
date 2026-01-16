@@ -1,151 +1,141 @@
 "use client";
 
-import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import { StarryBackground } from "@/components/StarryBackground";
-import { Footer } from "@/components/Footer";
-import { StaticPageHeader } from "@/components/StaticPageHeader";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { StarryBackground } from "@/components/StarryBackground";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export default function ContactPage() {
-  const [formState, setFormState] = useState("idle");
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormState("submitting");
-    setTimeout(() => setFormState("success"), 1500);
+    toast.success("Message sent successfully!", {
+        description: "We'll get back to you within 24 hours."
+    });
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <StarryBackground />
       <Navbar />
-      <main className="relative z-10">
-        <StaticPageHeader 
-          title="Contact Us" 
-          description="Have questions? We're here to help. Get in touch with our team for support or inquiries." 
-        />
-        
-        <section className="py-16 lg:py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-16">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">Get in Touch</h2>
-                <div className="space-y-8">
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shrink-0">
-                      <Mail className="w-6 h-6 text-indigo-500" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-900 dark:text-white">Email Us</h3>
-                      <p className="text-slate-600 dark:text-slate-400">support@honestgraphics.com</p>
-                      <p className="text-sm text-slate-500 mt-1">We typically respond within 24 hours.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shrink-0">
-                      <Phone className="w-6 h-6 text-indigo-500" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-900 dark:text-white">Call Us</h3>
-                      <p className="text-slate-600 dark:text-slate-400">+91 123 456 7890</p>
-                      <p className="text-sm text-slate-500 mt-1">Mon-Fri, 9am-6pm IST</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 shrink-0">
-                      <MapPin className="w-6 h-6 text-indigo-500" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-900 dark:text-white">Visit Our Office</h3>
-                      <p className="text-slate-600 dark:text-slate-400">Honest Graphics Hub, Mumbai, India</p>
-                      <p className="text-sm text-slate-500 mt-1">By appointment only.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+      <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+        >
+            <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
+                Get in Touch
+            </h1>
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Have questions about a product, licensing, or need support? We're here to help.
+            </p>
+        </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-xl"
-              >
-                {formState === "success" ? (
-                  <div className="text-center py-12">
-                    <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/20 mx-auto mb-6">
-                      <Send className="w-10 h-10 text-green-500" />
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+            {/* Contact Information */}
+            <div className="space-y-8">
+                <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Contact Information</h2>
+                    <div className="space-y-6">
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <Mail className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-slate-900 dark:text-white">Email Us</h3>
+                                <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 mb-2">For general inquiries and support.</p>
+                                <a href="mailto:support@honestgraphics.com" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">support@honestgraphics.com</a>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <Phone className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-slate-900 dark:text-white">Call Us</h3>
+                                <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 mb-2">Mon-Fri from 9am to 6pm IST.</p>
+                                <a href="tel:+911234567890" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">+91 123 456 7890</a>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <MapPin className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-slate-900 dark:text-white">Office</h3>
+                                <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
+                                    Honest Graphics HQ<br />
+                                    123 Creative Tower, Andheri West<br />
+                                    Mumbai, Maharashtra 400053<br />
+                                    India
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Message Sent!</h3>
-                    <p className="text-slate-600 dark:text-slate-400">Thank you for reaching out. We'll get back to you soon.</p>
-                    <button 
-                      onClick={() => setFormState("idle")}
-                      className="mt-8 text-indigo-600 font-semibold hover:underline"
-                    >
-                      Send another message
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid sm:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
-                        <input 
-                          required
-                          className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-slate-900 dark:text-white"
-                          placeholder="John Doe"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
-                        <input 
-                          required
-                          type="email"
-                          className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-slate-900 dark:text-white"
-                          placeholder="john@example.com"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Subject</label>
-                      <input 
-                        required
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-slate-900 dark:text-white"
-                        placeholder="How can we help?"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Message</label>
-                      <textarea 
-                        required
-                        rows={5}
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-slate-900 dark:text-white resize-none"
-                        placeholder="Your message here..."
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={formState === "submitting"}
-                      className="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                      {formState === "submitting" ? "Sending..." : "Send Message"}
-                      <Send className="w-5 h-5" />
-                    </button>
-                  </form>
-                )}
-              </motion.div>
+                </div>
+
+                <div className="bg-indigo-600 rounded-2xl p-8 text-white shadow-xl shadow-indigo-600/20">
+                    <h3 className="text-xl font-bold mb-4">Frequently Asked Questions</h3>
+                    <p className="text-indigo-100 mb-6 text-sm leading-relaxed">
+                        Check our FAQ section for quick answers to common questions about licensing, downloads, and payments.
+                    </p>
+                    <Button variant="secondary" className="w-full">
+                        Visit FAQ Center
+                    </Button>
+                </div>
             </div>
-          </div>
-        </section>
+
+            {/* Contact Form */}
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl"
+            >
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Send us a Message</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="firstName">First Name</Label>
+                            <Input id="firstName" placeholder="John" required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <Input id="lastName" placeholder="Doe" required />
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email Address</Label>
+                        <Input id="email" type="email" placeholder="john@example.com" required />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="subject">Subject</Label>
+                        <Input id="subject" placeholder="How can we help?" required />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="message">Message</Label>
+                        <Textarea id="message" placeholder="Tell us more about your inquiry..." className="min-h-[150px]" required />
+                    </div>
+
+                    <Button type="submit" size="lg" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                    </Button>
+                </form>
+            </motion.div>
+        </div>
       </main>
       <Footer />
     </div>

@@ -1,56 +1,134 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { CheckCircle2, Users, ShieldCheck, Zap } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
-import { StarryBackground } from "@/components/StarryBackground";
 import { Footer } from "@/components/Footer";
-import { StaticPageHeader } from "@/components/StaticPageHeader";
+import { StarryBackground } from "@/components/StarryBackground";
 
 export default function AboutPage() {
+  const stats = [
+    { label: "Design Templates", value: "5,000+" },
+    { label: "Active Users", value: "10,000+" },
+    { label: "Downloads", value: "50,000+" },
+    { label: "Support", value: "24/7" },
+  ];
+
   return (
-    <div className="min-h-screen relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <StarryBackground />
       <Navbar />
-      <main className="relative z-10">
-        <StaticPageHeader 
-          title="About Honest Graphics" 
-          description="We are dedicated to providing the highest quality design templates for creative professionals worldwide." 
-        />
-        
-        <section className="py-16 lg:py-24">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="prose prose-slate dark:prose-invert max-w-none">
-              <h2 className="text-2xl font-bold mb-6">Our Mission</h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-                At Honest Graphics & Printers, we believe that professional design should be accessible to everyone. 
-                Our mission is to empower designers, small business owners, and creative enthusiasts by providing 
-                ready-to-use, high-quality templates that save time and elevate their brand.
-              </p>
-              
-              <div className="grid md:grid-cols-2 gap-12 my-16">
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Quality First</h3>
-                  <p className="text-slate-600 dark:text-slate-400">
-                    Every template in our store is crafted by professional designers with years of experience in the 
-                    printing and digital media industry. We ensure correct color profiles, bleed areas, and 
-                    fully organized layers.
-                  </p>
+      <main className="relative pt-32 pb-20">
+        {/* Hero Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center max-w-3xl mx-auto"
+            >
+                <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-6">
+                    We Help Creative Professionals Scale Their Work
+                </h1>
+                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Honest Graphics & Printers is a premium marketplace for high-quality graphic design resources. 
+                    We bridge the gap between creativity and productivity by providing production-ready templates.
+                </p>
+            </motion.div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="border-y border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm mb-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {stats.map((stat, index) => (
+                        <div key={index} className="text-center">
+                            <div className="text-3xl lg:text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">{stat.value}</div>
+                            <div className="text-sm font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">{stat.label}</div>
+                        </div>
+                    ))}
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Format Versatility</h3>
-                  <p className="text-slate-600 dark:text-slate-400">
-                    We understand that different designers use different tools. That's why we offer our files in 
-                    Photoshop (PSD), Illustrator (AI), CorelDRAW (CDR), and InDesign (INDD) formats.
-                  </p>
-                </div>
-              </div>
-              
-              <h2 className="text-2xl font-bold mb-6">Our Story</h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-                Founded in Mumbai, India, Honest Graphics started as a small printing press. Over time, we realized 
-                the struggle many businesses faced in getting high-quality designs quickly. We decided to bridge 
-                this gap by creating a digital marketplace for premium design assets.
-              </p>
             </div>
-          </div>
-        </section>
+        </div>
+
+        {/* Mission Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Our Mission</h2>
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        In the fast-paced world of graphic design, time is currency. Our mission is to empower designers, 
+                        agencies, and print shops with a vast library of technically flawless, aesthetically superior templates.
+                    </p>
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        We believe in "Honest" design – files that are actually print-ready, layers that are actually organized, 
+                        and licenses that are transparent and fair.
+                    </p>
+                    
+                    <ul className="space-y-4 pt-4">
+                        {[
+                            "Production-ready CMYK & RGB files",
+                            "Support for all major design software",
+                            "Secure, instant digital delivery",
+                            "Commercial usage rights included"
+                        ].map((item, i) => (
+                            <li key={i} className="flex items-center gap-3">
+                                <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+                                <span className="text-slate-700 dark:text-slate-300">{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+                    <img 
+                        src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80" 
+                        alt="Design team collaborating" 
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            </div>
+        </div>
+
+        {/* Values Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white text-center mb-12">Why Choose Us?</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+                {[
+                    {
+                        icon: Zap,
+                        title: "Lightning Fast",
+                        desc: "Instant downloads and optimized server speeds ensure you get your files immediately after purchase."
+                    },
+                    {
+                        icon: ShieldCheck,
+                        title: "Quality Assured",
+                        desc: "Every template is manually vetted by senior designers for technical accuracy and print standards."
+                    },
+                    {
+                        icon: Users,
+                        title: "Community Focused",
+                        desc: "We listen to our users. Our library evolves based on the real-world needs of our design community."
+                    }
+                ].map((feature, i) => (
+                    <motion.div 
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
+                    >
+                        <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl flex items-center justify-center mb-6">
+                            <feature.icon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature.title}</h3>
+                        <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                            {feature.desc}
+                        </p>
+                    </motion.div>
+                ))}
+            </div>
+        </div>
       </main>
       <Footer />
     </div>

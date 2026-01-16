@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ShoppingCart, User, Menu, X, ChevronDown } from "lucide-react";
-import { PRODUCT_CATEGORIES } from "@/lib/data/products";
+import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogIn } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { useSelector } from "react-redux";
+import api from "@/lib/api";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -18,15 +19,29 @@ const navLinks = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
-  const cartItemCount = 0;
+  const [categories, setCategories] = useState([]);
+  const cartItemCount = useSelector((state) => state.cart.totalItems);
+  const { isAuthenticated } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await api.get('/categories');
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800/50 transition-colors">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <span className="text-white font-bold text-lg tracking-tight">HG</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 via-blue-500 to-white rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <span className="text-white font-bold text-lg tracking-tight drop-shadow-md">HG</span>
             </div>
             <div className="hidden sm:block">
               <span className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight transition-colors">Honest Graphics</span>
@@ -62,9 +77,9 @@ export function Navbar() {
                         transition={{ duration: 0.2 }}
                         className="absolute top-full left-0 w-64 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 p-2 mt-1"
                       >
-                        {PRODUCT_CATEGORIES.slice(0, 6).map((category) => (
+                        {categories.slice(0, 6).map((category) => (
                           <Link
-                            key={category.id}
+                            key={category._id}
                             href={`/products?category=${category.slug}`}
                             className="block px-4 py-2.5 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
                           >
@@ -110,13 +125,23 @@ export function Navbar() {
               )}
             </Link>
             
-            <Link
-              href="/account"
-              className="hidden sm:flex p-2.5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
-              aria-label="Account"
-            >
-              <User className="w-5 h-5" />
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/account"
+                className="hidden sm:flex p-2.5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                aria-label="Account"
+              >
+                <User className="w-5 h-5" />
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden sm:flex p-2.5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                aria-label="Sign In"
+              >
+                <LogIn className="w-5 h-5" />
+              </Link>
+            )}
 
             <button
               className="lg:hidden p-2.5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
@@ -149,14 +174,25 @@ export function Navbar() {
                   </Link>
                 ))}
                 <div className="pt-4 px-4 border-t border-slate-100 dark:border-slate-800 mt-2">
-                  <Link
-                    href="/account"
-                    className="flex items-center gap-3 py-3 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <User className="w-5 h-5" />
-                    My Account
-                  </Link>
+                  {isAuthenticated ? (
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-3 py-3 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <User className="w-5 h-5" />
+                      My Account
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="flex items-center gap-3 py-3 text-base font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <LogIn className="w-5 h-5" />
+                      Sign In
+                    </Link>
+                  )}
                 </div>
               </div>
             </motion.div>

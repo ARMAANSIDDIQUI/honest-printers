@@ -1,107 +1,130 @@
 "use client";
 
-import { useState } from "react";
-import { StarryBackground } from "@/components/StarryBackground";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Filter, SlidersHorizontal, Loader2 } from "lucide-react";
+import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { ProductCard } from "@/components/ProductCard";
-import { products, PRODUCT_CATEGORIES } from "@/lib/data/products";
-import { Search, Filter, SlidersHorizontal } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { StarryBackground } from "@/components/StarryBackground";
 import { Button } from "@/components/ui/button";
-import {
+import api from "@/lib/api";
+import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 export default function ProductsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const searchParams = useSearchParams();
+  const categorySlug = searchParams.get('category');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [categoryName, setCategoryName] = useState("");
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || product.categoryId === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let endpoint = '/products';
+        if (categorySlug) {
+            endpoint += `?category=${categorySlug}`;
+            // Also fetch category details to get the name
+            try {
+                const catRes = await api.get(`/categories/${categorySlug}`);
+                setCategoryName(catRes.data.name);
+            } catch (e) {
+                setCategoryName(categorySlug); // Fallback
+            }
+        } else {
+            setCategoryName("");
+        }
+
+        const { data } = await api.get(endpoint);
+        setProducts(data.products);
+      } catch (error) {
+        console.error("Failed to fetch products", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [categorySlug]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <StarryBackground />
       <Navbar />
-      
-      <main className="relative z-10 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col gap-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
-              Premium Templates
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 max-w-2xl">
-              Browse our collection of professional design templates. High-quality assets for your creative projects.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
-            <div className="relative w-full sm:w-96">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input 
-                placeholder="Search templates..." 
-                className="pl-10 bg-transparent border-none focus-visible:ring-1 focus-visible:ring-indigo-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+      <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-3">
+                        {categoryName ? categoryName : "All Products"}
+                    </h1>
+                    <p className="text-slate-600 dark:text-slate-400 max-w-2xl">
+                        {categoryName 
+                            ? `Browse our collection of ${categoryName.toLowerCase()} templates.` 
+                            : "Explore our complete collection of professional graphic design templates."}
+                    </p>
+                </motion.div>
             </div>
             
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex-1 sm:flex-none border-slate-200 dark:border-slate-800">
-                    <Filter className="w-4 h-4 mr-2" />
-                    {selectedCategory === "all" ? "All Categories" : PRODUCT_CATEGORIES.find(c => c.id === selectedCategory)?.name}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-                  <DropdownMenuItem onClick={() => setSelectedCategory("all")}>All Categories</DropdownMenuItem>
-                  {PRODUCT_CATEGORIES.map((category) => (
-                    <DropdownMenuItem 
-                      key={category.id} 
-                      onClick={() => setSelectedCategory(category.id)}
-                    >
-                      {category.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Button variant="outline" className="flex-1 sm:flex-none border-slate-200 dark:border-slate-800">
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
-                Sort
-              </Button>
+            <div className="flex items-center gap-3">
+                <Button variant="outline" className="gap-2 border-slate-200 dark:border-slate-800">
+                    <SlidersHorizontal className="w-4 h-4" />
+                    Filters
+                </Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="gap-2 border-slate-200 dark:border-slate-800">
+                            <Filter className="w-4 h-4" />
+                            Sort By
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Sort Order</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Newest First</DropdownMenuItem>
+                        <DropdownMenuItem>Price: Low to High</DropdownMenuItem>
+                        <DropdownMenuItem>Price: High to Low</DropdownMenuItem>
+                        <DropdownMenuItem>Popularity</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-slate-500 dark:text-slate-400">No products found matching your criteria.</p>
-              <Button 
-                variant="link" 
-                onClick={() => { setSearchTerm(""); setSelectedCategory("all"); }}
-                className="text-indigo-600 dark:text-indigo-400"
-              >
-                Clear all filters
-              </Button>
-            </div>
-          )}
         </div>
+
+        {/* Product Grid */}
+        {loading ? (
+            <div className="flex justify-center py-20">
+                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            </div>
+        ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                {products.map((product, index) => (
+                    <ProductCard key={product._id} product={product} index={index} />
+                ))}
+            </div>
+        )}
+
+        {!loading && products.length === 0 && (
+            <div className="text-center py-20">
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white">No products found</h3>
+                <p className="text-slate-500 mt-2">Try adjusting your filters or search criteria.</p>
+            </div>
+        )}
       </main>
-      
       <Footer />
     </div>
   );

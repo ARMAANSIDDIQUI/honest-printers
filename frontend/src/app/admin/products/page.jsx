@@ -1,18 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  Edit, 
-  Trash2, 
-  Eye,
-  ArrowUpDown
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Plus, Search, Filter, Loader2, MoreHorizontal } from "lucide-react";
+import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/data/products";
 import {
   Table,
   TableBody,
@@ -25,110 +20,119 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 
-const products = [
-  { id: 1, name: "Premium Business Card", category: "Stationery", price: "$29.99", stock: 120, status: "Active" },
-  { id: 2, name: "Minimalist Flyer", category: "Marketing", price: "$19.99", stock: 85, status: "Active" },
-  { id: 3, name: "Modern Brochure", category: "Stationery", price: "$49.99", stock: 45, status: "Out of Stock" },
-  { id: 4, name: "Social Media Pack", category: "Digital", price: "$39.99", stock: 300, status: "Active" },
-  { id: 5, name: "Logo Design Kit", category: "Branding", price: "$99.99", stock: 15, status: "Active" },
-];
+export default function AdminProductsPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function AdminProducts() {
-  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data } = await api.get('/products');
+        setProducts(data.products);
+      } catch (error) {
+        console.error("Failed to fetch products", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Products</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage your store's product catalog.</p>
+        <div className="flex items-center justify-between">
+            <div>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Products</h1>
+                <p className="text-slate-500">Manage your digital products and variants.</p>
+            </div>
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Product
+            </Button>
         </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Product
-        </Button>
-      </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full sm:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input 
-            placeholder="Search products..." 
-            className="pl-10 bg-white/50 dark:bg-slate-900/50"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4">
+                <div className="relative flex-1 max-w-sm">
+                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Input placeholder="Search products..." className="pl-9" />
+                </div>
+                <Button variant="outline" className="gap-2">
+                    <Filter className="w-4 h-4" />
+                    Filters
+                </Button>
+            </div>
+            
+            {loading ? (
+                <div className="p-12 flex justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                </div>
+            ) : (
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Product</TableHead>
+                            <TableHead>Category</TableHead>
+                            <TableHead>Variants</TableHead>
+                            <TableHead>Price Range</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {products.map((product) => {
+                             const prices = product.variants.map(v => v.price);
+                             const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+                             const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+                             
+                             return (
+                                <TableRow key={product._id}>
+                                    <TableCell className="font-medium">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                                <img src={product.thumbnail} alt="" className="w-full h-full object-cover" />
+                                            </div>
+                                            <span className="truncate max-w-[200px]">{product.name}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="capitalize">{product.categoryId.replace('-', ' ')}</TableCell>
+                                    <TableCell>{product.variants.length} Variants</TableCell>
+                                    <TableCell>
+                                        {formatPrice(minPrice)} - {formatPrice(maxPrice)}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Active</Badge>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                    <span className="sr-only">Open menu</span>
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                <DropdownMenuItem>Edit Product</DropdownMenuItem>
+                                                <DropdownMenuItem>View Details</DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem className="text-red-600">Delete Product</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                             );
+                        })}
+                    </TableBody>
+                </Table>
+            )}
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Button variant="outline" className="flex-1 sm:flex-none">
-            <Filter className="w-4 h-4 mr-2" />
-            Filter
-          </Button>
-          <Button variant="outline" className="flex-1 sm:flex-none">
-            <ArrowUpDown className="w-4 h-4 mr-2" />
-            Sort
-          </Button>
-        </div>
-      </div>
-
-      <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-slate-200 dark:border-slate-800">
-              <TableHead className="text-slate-900 dark:text-slate-200">Product</TableHead>
-              <TableHead className="text-slate-900 dark:text-slate-200">Category</TableHead>
-              <TableHead className="text-slate-900 dark:text-slate-200">Price</TableHead>
-              <TableHead className="text-slate-900 dark:text-slate-200">Stock</TableHead>
-              <TableHead className="text-slate-900 dark:text-slate-200">Status</TableHead>
-              <TableHead className="text-right text-slate-900 dark:text-slate-200">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id} className="border-slate-200 dark:border-slate-800">
-                <TableCell className="font-medium text-slate-900 dark:text-white">
-                  {product.name}
-                </TableCell>
-                <TableCell className="text-slate-600 dark:text-slate-400">{product.category}</TableCell>
-                <TableCell className="text-slate-600 dark:text-slate-400">{product.price}</TableCell>
-                <TableCell className="text-slate-600 dark:text-slate-400">{product.stock}</TableCell>
-                <TableCell>
-                  <Badge 
-                    variant={product.status === "Active" ? "default" : "secondary"}
-                    className={product.status === "Active" ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20" : ""}
-                  >
-                    {product.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-                      <DropdownMenuItem className="gap-2">
-                        <Eye className="w-4 h-4" /> View
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="gap-2">
-                        <Edit className="w-4 h-4" /> Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="gap-2 text-red-600 dark:text-red-400">
-                        <Trash2 className="w-4 h-4" /> Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
     </div>
   );
 }

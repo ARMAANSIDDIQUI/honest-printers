@@ -1,13 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "./ProductCard";
-import { getFeaturedProducts } from "@/lib/data/products";
+import api from "@/lib/api";
 
 export function FeaturedProducts() {
-  const featuredProducts = getFeaturedProducts();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        // Assuming your API has a way to get featured products or just getting first few
+        // Adding a query param for featured=true would be ideal in backend
+        const { data } = await api.get('/products');
+        // Filter client side for now if backend doesn't support filter
+        const featured = data.products.filter(p => p.featured).slice(0, 4);
+        setProducts(featured.length > 0 ? featured : data.products.slice(0, 4));
+      } catch (error) {
+        console.error("Failed to fetch products", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  if (products.length === 0) return null;
 
   return (
     <section className="py-20 lg:py-28">
@@ -37,8 +56,8 @@ export function FeaturedProducts() {
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
+          {products.map((product, index) => (
+            <ProductCard key={product._id} product={product} index={index} />
           ))}
         </div>
       </div>

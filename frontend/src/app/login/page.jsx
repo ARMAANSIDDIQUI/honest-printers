@@ -1,128 +1,220 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { StarryBackground } from "@/components/StarryBackground";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Mail, Lock, User, Loader2 } from "lucide-react";
+import { FaGoogle } from "react-icons/fa";
+import { loginStart, loginSuccess, loginFailure } from "@/lib/redux/slices/userSlice";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { StarryBackground } from "@/components/StarryBackground";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Github } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+import api from "@/lib/api";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading } = useSelector((state) => state.user);
+  
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [registerData, setRegisterData] = useState({ name: "", email: "", password: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/api/auth/google";
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Dummy login logic
-    window.location.href = "/";
+    dispatch(loginStart());
+    
+    try {
+        const { data } = await api.post('/auth/login', loginData);
+        // Save token
+        localStorage.setItem('token', data.token);
+        
+        dispatch(loginSuccess(data));
+        toast.success(`Welcome back, ${data.name}!`);
+        
+        if (data.role === 'admin') {
+            router.push('/admin');
+        } else {
+            router.push('/account');
+        }
+    } catch (error) {
+        const message = error.response?.data?.message || "Login failed";
+        dispatch(loginFailure(message));
+        toast.error(message);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    dispatch(loginStart());
+    
+    try {
+        const { data } = await api.post('/auth/register', registerData);
+        // Save token
+        localStorage.setItem('token', data.token);
+        
+        dispatch(loginSuccess(data));
+        toast.success("Account created successfully!");
+        router.push('/account');
+    } catch (error) {
+        const message = error.response?.data?.message || "Registration failed";
+        dispatch(loginFailure(message));
+        toast.error(message);
+    }
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors flex flex-col">
       <StarryBackground />
       <Navbar />
-      
-      <main className="relative z-10 flex items-center justify-center min-h-[calc(100vh-80px)] pt-20 px-4">
-        <Card className="w-full max-w-md bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-slate-200 dark:border-slate-800">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center text-slate-900 dark:text-white">Sign in</CardTitle>
-            <CardDescription className="text-center text-slate-500 dark:text-slate-400">
-              Enter your email and password to access your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="name@example.com" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link 
-                    href="/forgot-password" 
-                    className="text-xs text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                  >
-                    Forgot password?
-                  </Link>
+      <main className="flex-1 flex items-center justify-center pt-20 pb-20 px-4">
+        <div className="w-full max-w-md relative z-10">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden"
+            >
+                <div className="p-8 text-center border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome Back</h1>
+                    <p className="text-sm text-slate-500 mt-2">Sign in to access your downloads and account.</p>
                 </div>
-                <Input 
-                  id="password" 
-                  type="password" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
-                Sign In
-              </Button>
-            </form>
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-slate-200 dark:border-slate-800" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white dark:bg-slate-900 px-2 text-slate-500 dark:text-slate-400">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="border-slate-200 dark:border-slate-800">
-                <Github className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button variant="outline" className="border-slate-200 dark:border-slate-800">
-                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-                  <path
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    fill="#4285F4"
-                  />
-                  <path
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    fill="#34A853"
-                  />
-                  <path
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-                    fill="#FBBC05"
-                  />
-                  <path
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    fill="#EA4335"
-                  />
-                </svg>
-                Google
-              </Button>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <p className="text-center text-sm text-slate-500 dark:text-slate-400 w-full">
-              Don&apos;t have an account?{" "}
-              <Link 
-                href="/register" 
-                className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-              >
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
-        </Card>
+
+                <div className="p-6">
+                    <div className="mb-6">
+                        <Button 
+                            variant="outline" 
+                            className="w-full gap-2 py-5 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                            onClick={handleGoogleLogin}
+                        >
+                            <FaGoogle className="w-4 h-4 text-red-500" />
+                            Sign in with Google
+                        </Button>
+                        
+                        <div className="relative my-6">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-slate-100 dark:border-slate-800" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-white dark:bg-slate-900 px-2 text-slate-500">Or continue with</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Tabs defaultValue="login" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2 mb-6">
+                            <TabsTrigger value="login">Login</TabsTrigger>
+                            <TabsTrigger value="register">Register</TabsTrigger>
+                        </TabsList>
+                        
+                        <TabsContent value="login">
+                            <form onSubmit={handleLogin} className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                        <Input 
+                                            id="email" 
+                                            type="email" 
+                                            placeholder="name@example.com" 
+                                            className="pl-9" 
+                                            required 
+                                            value={loginData.email}
+                                            onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="password">Password</Label>
+                                        <a href="#" className="text-xs text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                                    </div>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                        <Input 
+                                            id="password" 
+                                            type="password" 
+                                            placeholder="••••••••" 
+                                            className="pl-9" 
+                                            required 
+                                            value={loginData.password}
+                                            onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                <Button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+                                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                                    Sign In
+                                </Button>
+                            </form>
+                        </TabsContent>
+                        
+                        <TabsContent value="register">
+                            <form onSubmit={handleRegister} className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="name">Full Name</Label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                        <Input 
+                                            id="name" 
+                                            placeholder="John Doe" 
+                                            className="pl-9" 
+                                            required 
+                                            value={registerData.name}
+                                            onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="register-email">Email Address</Label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                        <Input 
+                                            id="register-email" 
+                                            type="email" 
+                                            placeholder="name@example.com" 
+                                            className="pl-9" 
+                                            required 
+                                            value={registerData.email}
+                                            onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="register-password">Password</Label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                        <Input 
+                                            id="register-password" 
+                                            type="password" 
+                                            placeholder="Create a password" 
+                                            className="pl-9" 
+                                            required 
+                                            value={registerData.password}
+                                            onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                <Button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+                                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                                    Create Account
+                                </Button>
+                            </form>
+                        </TabsContent>
+                    </Tabs>
+                </div>
+            </motion.div>
+        </div>
       </main>
-      
       <Footer />
     </div>
   );

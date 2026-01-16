@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { PRODUCT_CATEGORIES } from "@/lib/data/products";
+import api from "@/lib/api";
 
 const categoryImages = {
   "business-cards": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=80",
@@ -17,6 +18,20 @@ const categoryImages = {
 };
 
 export function CategoriesSection() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await api.get('/categories');
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
   return (
     <section className="py-20 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,9 +51,9 @@ export function CategoriesSection() {
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-            {PRODUCT_CATEGORIES.map((category, index) => (
+            {categories.map((category, index) => (
               <motion.div
-                key={category.id}
+                key={category._id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -49,7 +64,7 @@ export function CategoriesSection() {
                   className="group block relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors"
                 >
                   <img
-                    src={categoryImages[category.slug] || categoryImages["business-cards"]}
+                    src={category.thumbnail || categoryImages[category.slug] || categoryImages["business-cards"]}
                     alt={category.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 dark:opacity-60 group-hover:opacity-100 dark:group-hover:opacity-80 transition-opacity"
                   />
