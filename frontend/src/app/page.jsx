@@ -14,7 +14,7 @@ export default function Home() {
         <StarryBackground />
       </div>
       <div className="block dark:hidden">
-        <ShootingStarBackground />
+        {/* <ShootingStarBackground /> */}
       </div>
       <Navbar />
       <main className="relative z-10">
