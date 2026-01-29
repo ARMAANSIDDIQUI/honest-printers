@@ -41,14 +41,17 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  
+
   --animate-gradient-xy: gradient-xy 3s ease infinite;
-  
+
   @keyframes gradient-xy {
-    0%, 100% {
+
+    0%,
+    100% {
       background-size: 200% 200%;
       background-position: left center;
     }
+
     50% {
       background-size: 200% 200%;
       background-position: right center;
@@ -95,9 +98,11 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695); /* slate-950 */
+  --background: oklch(0.129 0.042 264.695);
+  /* slate-950 */
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.186 0.038 264.695); /* slate-900 */
+  --card: oklch(0.186 0.038 264.695);
+  /* slate-900 */
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.186 0.038 264.695);
   --popover-foreground: oklch(0.985 0 0);
@@ -140,7 +145,8 @@
 
     @apply bg-background text-foreground;
 
-    user-select: none; /* Disable text selection */
+    user-select: none;
+    /* Disable text selection */
 
     -webkit-user-select: none;
 
@@ -148,11 +154,13 @@
 
   img {
 
-    -webkit-user-drag: none; /* Disable image dragging */
+    -webkit-user-drag: none;
+    /* Disable image dragging */
 
     user-drag: none;
 
-    pointer-events: none; /* Disable interaction with images (like right click save) */
+    pointer-events: none;
+    /* Disable interaction with images (like right click save) */
 
   }
 
@@ -161,41 +169,57 @@
 /* Shooting Star Styles */
 .shooting-star {
   position: absolute;
-  width: 2px; /* Start with star head size */
-  height: 2px; /* Thin line */
-  background: linear-gradient(0deg, rgba(60, 100, 200, 1) 0%, rgba(60, 100, 200, 1) 25%, rgba(60, 100, 200, 0.05) 50%, rgba(60, 100, 200, 0) 100%); /* Darker blue, thicker head, thinner tail */
-  filter: drop-shadow(0 0 10px rgba(70, 110, 210, 1)); /* Darker bolder glow */
-  animation-name: shooting, trail; /* Reintroduce trail animation */
+  width: 2px;
+  /* Start with star head size */
+  height: 2px;
+  /* Thin line */
+  background: linear-gradient(0deg, rgba(60, 100, 200, 1) 0%, rgba(60, 100, 200, 1) 25%, rgba(60, 100, 200, 0.05) 50%, rgba(60, 100, 200, 0) 100%);
+  /* Darker blue, thicker head, thinner tail */
+  filter: drop-shadow(0 0 10px rgba(70, 110, 210, 1));
+  /* Darker bolder glow */
+  animation-name: shooting, trail;
+  /* Reintroduce trail animation */
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
-  z-index: 1; /* Ensure stars are above the background gradient */
-  transform-origin: 100% 50%; /* Anchor trail growth to the head */
+  z-index: 1;
+  /* Ensure stars are above the background gradient */
+  transform-origin: 100% 50%;
+  /* Anchor trail growth to the head */
 }
 
 @keyframes shooting {
   0% {
-    transform: translateX(0) translateY(0) rotate(66.8deg); /* Apply rotation here */
+    transform: translateX(0) translateY(0) rotate(66.8deg);
+    /* Apply rotation here */
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
-    transform: translateX(75vw) translateY(175vh) rotate(66.8deg); /* Apply rotation here */
+    transform: translateX(75vw) translateY(175vh) rotate(66.8deg);
+    /* Apply rotation here */
     opacity: 0;
   }
 }
 
 @keyframes trail {
   0% {
-    width: 2px; /* Star head size (height) */
+    width: 2px;
+    /* Star head size (height) */
   }
+
   25% {
-    width: 150px; /* Increased trail length */
+    width: 150px;
+    /* Increased trail length */
   }
+
   100% {
-    width: 2px; /* End with star head size */
+    width: 2px;
+    /* End with star head size */
   }
 }
 
@@ -234,6 +258,6 @@
 
   z-index: 10;
 
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 20px);
 
 }

@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { StarryBackground } from "@/components/StarryBackground";
 import { ShootingStarBackground } from "@/components/ShootingStarBackground";
+import MeteorBackground from "@/components/MeteorBackground";
 import { HeroSection } from "@/components/HeroSection";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
 import { CategoriesSection } from "@/components/CategoriesSection";
@@ -15,6 +16,7 @@ export default function Home() {
       </div>
       <div className="block dark:hidden">
         {/* <ShootingStarBackground /> */}
+        <MeteorBackground />
       </div>
       <Navbar />
       <main className="relative z-10">
