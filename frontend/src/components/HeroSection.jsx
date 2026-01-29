@@ -31,7 +31,7 @@ function HeroImage() {
   return (
     <img
       src={imgSrc}
-      alt="Honest Printers - Premium Printing Services"
+      alt="Honest Graphics & Printers - Premium Printing Services"
       className="w-full h-auto object-contain transition-opacity duration-500 relative z-10"
     />
   );
@@ -64,7 +64,7 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight transition-colors"
             >
-              Honest <span className="text-indigo-600 dark:text-indigo-400">Printers</span>
+              Honest <span className="text-indigo-600 dark:text-indigo-400">Graphics & Printers</span>
             </motion.h1>
 
             <motion.p
