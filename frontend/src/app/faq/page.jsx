@@ -22,6 +22,14 @@ const faqs = [
     answer: "Due to the digital nature of our products, we generally do not offer refunds once a file has been downloaded. However, if you experience technical issues with a file, please contact our support team and we will be happy to assist you."
   },
   {
+    question: "Do you offer custom design services?",
+    answer: "Yes! If you need a unique design tailored to your specific brand needs, we offer custom design services. Please contact us through the Contact page or email us directly to discuss your project requirements."
+  },
+  {
+    question: "What payment methods do you accept?",
+    answer: "We accept all major credit and debit cards, UPI, and Net Banking through our secure payment gateway. All transactions are encrypted and secure."
+  },
+  {
     question: "Are the fonts included in the download?",
     answer: "Due to licensing restrictions, we cannot include the font files themselves. However, we include a text file with links to where you can download the fonts used in the template (most are free Google Fonts)."
   }
@@ -33,17 +41,17 @@ export default function FAQPage() {
       <StarryBackground />
       <Navbar />
       <main className="relative z-10">
-        <StaticPageHeader 
-          title="Frequently Asked Questions" 
-          description="Find answers to common questions about our templates, licenses, and downloads." 
+        <StaticPageHeader
+          title="Frequently Asked Questions"
+          description="Find answers to common questions about our templates, licenses, and downloads."
         />
-        
+
         <section className="py-16 lg:py-24">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <Accordion type="single" collapsible className="w-full space-y-4">
               {faqs.map((faq, index) => (
-                <AccordionItem 
-                  key={index} 
+                <AccordionItem
+                  key={index}
                   value={`item-${index}`}
                   className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl px-6 transition-colors"
                 >
@@ -56,7 +64,7 @@ export default function FAQPage() {
                 </AccordionItem>
               ))}
             </Accordion>
-            
+
             <div className="mt-16 text-center">
               <p className="text-slate-600 dark:text-slate-400">
                 Still have questions? <a href="/contact" className="text-indigo-600 font-semibold hover:underline">Contact our support team</a>

@@ -14,23 +14,23 @@ const socialLinks = [
 ];
 
 const companyLinks = [
-    { name: "About Us", href: "/about" },
-    { name: "Contact", href: "/contact" },
-    { name: "Careers", href: "/careers" },
-    { name: "Blog", href: "/blog" }
+  { name: "About Us", href: "/about" },
+  { name: "Contact", href: "/contact" },
+  { name: "Careers", href: "/careers" },
+  { name: "Blog", href: "/blog" }
 ];
 
 const supportLinks = [
-    { name: "Help Center", href: "/help" },
-    { name: "License Terms", href: "/license" },
-    { name: "Refund Policy", href: "/refunds" },
-    { name: "FAQ", href: "/faq" }
+  { name: "Support Center", href: "/support" },
+  { name: "License Terms", href: "/license" },
+  { name: "Refund Policy", href: "/refunds" },
+  { name: "FAQ", href: "/faq" }
 ];
 
 const legalLinks = [
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Service", href: "/terms" },
-    { name: "Cookie Policy", href: "/cookies" }
+  { name: "Privacy Policy", href: "/privacy" },
+  { name: "Terms of Service", href: "/terms" },
+  { name: "Cookie Policy", href: "/cookies" }
 ];
 
 export function Footer() {
@@ -40,10 +40,12 @@ export function Footer() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await api.get('/categories');
-        setCategories(data);
+        const response = await api.get('/categories');
+        setCategories(response.data || []);
       } catch (error) {
-        console.error("Failed to fetch categories", error);
+        // Silently fail or log warning
+        console.warn("Failed to fetch footer categories:", error.message);
+        setCategories([]);
       }
     };
     fetchCategories();
@@ -65,7 +67,7 @@ export function Footer() {
                 </div>
               </Link>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 max-w-sm leading-relaxed transition-colors">
-                Premium graphic design templates for creative professionals. 
+                Premium graphic design templates for creative professionals.
                 Instant downloads with lifetime access and commercial licenses.
               </p>
               <div className="space-y-3">
@@ -80,21 +82,21 @@ export function Footer() {
                 <p className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400 transition-colors">
                   <MapPin className="w-4 h-4 text-indigo-500 dark:text-indigo-400 mt-1 flex-shrink-0" />
                   <span>
-                    Ghass Mandi, Bazar Ganj,<br/>
-                    Opp Bank Of Baroda,<br/>
+                    Ghass Mandi, Bazar Ganj,<br />
+                    Opp Bank Of Baroda,<br />
                     Moradabad-244001, UP
                   </span>
                 </p>
                 <div className="mt-4 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 h-32 w-full">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3494.9517299544336!2d78.77053597550844!3d28.840297075551835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390afbc3ab2acc8d%3A0xf2588bfcecfb516!2sHonest%20Printers!5e0!3m2!1sen!2sin!4v1768570630745!5m2!1sen!2sin" 
-                        width="100%" 
-                        height="100%" 
-                        style={{border:0}} 
-                        allowFullScreen="" 
-                        loading="lazy" 
-                        referrerPolicy="no-referrer-when-downgrade"
-                    ></iframe>
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3494.9517299544336!2d78.77053597550844!3d28.840297075551835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390afbc3ab2acc8d%3A0xf2588bfcecfb516!2sHonest%20Printers!5e0!3m2!1sen!2sin!4v1768570630745!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
               </div>
             </div>

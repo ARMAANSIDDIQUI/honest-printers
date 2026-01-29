@@ -26,10 +26,11 @@ export function Navbar() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await api.get('/categories');
-        setCategories(data);
+        const response = await api.get('/categories');
+        setCategories(response.data || []);
       } catch (error) {
-        console.error("Failed to fetch categories", error);
+        console.warn("Failed to fetch categories (using empty list):", error.message);
+        setCategories([]);
       }
     };
     fetchCategories();
@@ -66,7 +67,7 @@ export function Navbar() {
                     <ChevronDown className={`w-4 h-4 transition-transform ${productsDropdownOpen ? "rotate-180" : ""}`} />
                   )}
                 </Link>
-                
+
                 {link.hasDropdown && (
                   <AnimatePresence>
                     {productsDropdownOpen && (
@@ -104,14 +105,14 @@ export function Navbar() {
 
           <div className="flex items-center gap-1 sm:gap-3">
             <ThemeToggle />
-            
+
             <button
               className="p-2.5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
               aria-label="Search"
             >
               <Search className="w-5 h-5" />
             </button>
-            
+
             <Link
               href="/cart"
               className="relative p-2.5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
@@ -124,7 +125,7 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            
+
             {isAuthenticated && user?.role === 'admin' && (
               <Link
                 href="/admin"
@@ -194,7 +195,7 @@ export function Navbar() {
                       Admin Dashboard
                     </Link>
                   )}
-                  
+
                   {isAuthenticated ? (
                     <Link
                       href="/account"

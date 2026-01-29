@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { StarryBackground } from "@/components/StarryBackground";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,8 +20,7 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
-            <StarryBackground />
+        <div className="min-h-screen transition-colors">
             <Navbar />
             <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
@@ -100,9 +99,11 @@ export default function ContactPage() {
                             <p className="text-indigo-100 mb-6 text-sm leading-relaxed">
                                 Check our FAQ section for quick answers to common questions about licensing, downloads, and payments.
                             </p>
-                            <Button variant="secondary" className="w-full">
-                                Visit FAQ Center
-                            </Button>
+                            <Link href="/faq">
+                                <Button variant="secondary" className="w-full">
+                                    Visit FAQ Center
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 
@@ -115,7 +116,7 @@ export default function ContactPage() {
                     >
                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Send us a Message</h2>
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="firstName">First Name</Label>
                                     <Input id="firstName" placeholder="John" required />

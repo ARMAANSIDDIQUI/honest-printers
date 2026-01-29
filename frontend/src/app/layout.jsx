@@ -3,6 +3,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/lib/redux/provider";
 import { Toaster } from "sonner";
 import ClientProtection from "@/components/ClientProtection";
+import { StarryBackground } from "@/components/StarryBackground";
+import MeteorBackground from "@/components/MeteorBackground";
 
 export const metadata = {
   title: "Honest Graphics & Printers | Digital, Screen & Offset Printing Services",
@@ -27,6 +29,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <div className="hidden dark:block">
+              <StarryBackground />
+            </div>
+            <div className="block dark:hidden">
+              <MeteorBackground />
+            </div>
             {children}
             <Toaster richColors closeButton position="top-center" />
           </ThemeProvider>
