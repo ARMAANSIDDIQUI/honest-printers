@@ -10,8 +10,7 @@ const passport = require('passport');
 require('./config/passport');
 const connectDB = require('./config/db');
 const mongoose = require('mongoose');
-const connectDB = require('./config/db');
-const mongoose = require('mongoose');
+
 
 const app = express();
 
