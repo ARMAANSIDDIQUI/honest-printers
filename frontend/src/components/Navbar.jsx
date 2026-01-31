@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogIn, LayoutDashboard, Download } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogIn, LayoutDashboard, Download, Bell, BellOff } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useSelector } from "react-redux";
 import api from "@/lib/api";
 import { useInstallPwa } from "@/context/InstallPwaContext";
+import { useNotification } from "@/context/NotificationContext";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -24,6 +25,7 @@ export function Navbar() {
   const cartItemCount = useSelector((state) => state.cart.totalItems);
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { install, isInstallable } = useInstallPwa();
+  const { permission, requestPermission } = useNotification();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -107,6 +109,18 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center gap-1 sm:gap-3">
+              <button
+                onClick={requestPermission}
+                className={`p-2.5 rounded-full transition-colors ${permission === 'granted'
+                  ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20"
+                  : "text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                  }`}
+                aria-label="Notifications"
+                title={permission === 'granted' ? "Notifications Enabled" : "Enable Notifications"}
+              >
+                {permission === 'granted' ? <Bell className="w-5 h-5 fill-current" /> : <BellOff className="w-5 h-5" />}
+              </button>
+
               {isInstallable && (
                 <button
                   onClick={install}

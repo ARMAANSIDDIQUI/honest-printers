@@ -16,7 +16,7 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen transition-colors">
             <Navbar />
-            <main className="relative pb-20">
+            <main className="relative pt-4 pb-20">
                 {/* Hero Section */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
                     <motion.div

@@ -30,7 +30,7 @@ export default function CookiesPage() {
     return (
         <div className="min-h-screen transition-colors">
             <Navbar />
-            <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header */}
                 <div className="flex flex-col items-center text-center mb-16">

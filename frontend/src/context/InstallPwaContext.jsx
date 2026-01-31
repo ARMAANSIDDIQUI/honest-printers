@@ -22,18 +22,26 @@ export function InstallPwaProvider({ children }) {
             setPrompt(e);
             setIsInstallable(true);
 
-            // Show toast after a delay
-            setTimeout(() => {
-                toast("Install Honest App", {
-                    description: "Install our app for a better experience.",
-                    action: {
-                        label: "Install",
-                        onClick: () => e.prompt(),
-                    },
-                    icon: <Download className="w-4 h-4" />,
-                    duration: 10000,
-                });
-            }, 5000);
+            // Check if we showed the toast recently (2 hours)
+            const lastToastTime = localStorage.getItem('installToastTime');
+            const now = Date.now();
+            const twoHours = 2 * 60 * 60 * 1000;
+
+            if (!lastToastTime || (now - lastToastTime) > twoHours) {
+                // Show toast after a delay
+                setTimeout(() => {
+                    toast("Install Honest App", {
+                        description: "Install our app for a better experience.",
+                        action: {
+                            label: "Install",
+                            onClick: () => e.prompt(),
+                        },
+                        icon: <Download className="w-4 h-4" />,
+                        duration: 10000,
+                    });
+                    localStorage.setItem('installToastTime', now.toString());
+                }, 5000);
+            }
         };
 
         window.addEventListener("beforeinstallprompt", handler);

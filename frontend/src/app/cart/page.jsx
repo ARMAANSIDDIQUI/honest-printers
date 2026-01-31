@@ -24,7 +24,7 @@ export default function CartPage() {
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
         <StarryBackground />
         <Navbar />
-        <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
             <div className="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-full flex items-center justify-center mb-6 border border-slate-200 dark:border-slate-800">
               <ShoppingBag className="w-10 h-10 text-slate-400 dark:text-slate-500" />
@@ -49,7 +49,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <StarryBackground />
       <Navbar />
-      <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">Shopping Cart</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

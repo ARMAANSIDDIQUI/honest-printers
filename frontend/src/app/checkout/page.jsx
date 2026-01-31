@@ -14,12 +14,14 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useNotification } from "@/context/NotificationContext";
 
 export default function CheckoutPage() {
     const { items, totalAmount } = useSelector((state) => state.cart);
     const { isAuthenticated, loading } = useSelector((state) => state.user);
     const [isProcessing, setIsProcessing] = useState(false);
     const router = useRouter();
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -47,6 +49,12 @@ export default function CheckoutPage() {
         // Simulate API call
         setTimeout(() => {
             setIsProcessing(false);
+
+            showNotification("Order Successful! 🎉", {
+                body: "Your order has been placed successfully. Check your email for details.",
+                tag: "order-success"
+            });
+
             toast.success("Order placed successfully!", {
                 description: "You will receive an email with your download links shortly."
             });
@@ -57,7 +65,7 @@ export default function CheckoutPage() {
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
                 <Navbar />
-                <div className="pb-20 text-center">
+                <div className="pt-4 pb-20 text-center">
                     <h1 className="text-2xl font-bold">Your cart is empty</h1>
                 </div>
             </div>
@@ -68,7 +76,7 @@ export default function CheckoutPage() {
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
             <StarryBackground />
             <Navbar />
-            <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-3 mb-8">
                     <Lock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Secure Checkout</h1>

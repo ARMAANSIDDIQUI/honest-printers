@@ -133,7 +133,7 @@ export default function AccountPage() {
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
             <StarryBackground />
             <Navbar />
-            <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Account</h1>
@@ -159,8 +159,8 @@ export default function AccountPage() {
                                     key={item.id}
                                     onClick={() => setActiveTab(item.id)}
                                     className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all ${activeTab === item.id
-                                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-                                            : "text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 hover:text-indigo-600 dark:hover:text-white"
+                                        ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
+                                        : "text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 hover:text-indigo-600 dark:hover:text-white"
                                         }`}
                                 >
                                     <item.icon className="w-4 h-4" />
