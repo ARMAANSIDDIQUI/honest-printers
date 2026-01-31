@@ -10,6 +10,8 @@ const passport = require('passport');
 require('./config/passport');
 const connectDB = require('./config/db');
 const mongoose = require('mongoose');
+const connectDB = require('./config/db');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -43,6 +45,21 @@ app.use(cors({
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// DB Connection Resilience Middleware
+app.use(async (req, res, next) => {
+  if (mongoose.connection.readyState === 0) {
+    console.log('⚠️ DB is disconnected. Attempting to reconnect...');
+    try {
+      await connectDB();
+      console.log('✅ Reconnected to DB successfully');
+    } catch (error) {
+      console.error('❌ Failed to reconnect to DB:', error.message);
+      // We don't block the request here, but it will likely fail later if it needs DB
+    }
+  }
+  next();
+});
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
