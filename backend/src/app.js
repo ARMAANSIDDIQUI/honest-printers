@@ -51,6 +51,21 @@ app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/contact', require('./routes/contactRoutes'));
 
+// Health/Debug Check
+app.get('/api/health', (req, res) => {
+  const mongoose = require('mongoose');
+  const stateMap = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  const dbState = mongoose.connection.readyState;
+
+  res.json({
+    status: 'ok',
+    timestamp: new Date(),
+    dbState: stateMap[dbState] || dbState,
+    dbHost: mongoose.connection.host,
+    env: process.env.NODE_ENV
+  });
+});
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
