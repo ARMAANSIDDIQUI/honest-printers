@@ -31,7 +31,7 @@ router.get(
     });
 
     // Redirect to Frontend with token
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const clientUrl = process.env.CLIENT_URL || 'https://honestprinters.in';
     res.redirect(`${clientUrl}/oauth/callback?token=${token}`);
   }
 );

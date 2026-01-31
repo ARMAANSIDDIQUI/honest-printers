@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess, loginFailure } from "@/lib/redux/slices/userSlice";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import axios from "axios";
+import api from "@/lib/api";
 
 function OAuthCallbackContent() {
   const router = useRouter();
@@ -18,22 +18,22 @@ function OAuthCallbackContent() {
     if (token) {
       // 1. Save token (usually handled by Redux or an API utility wrapper)
       localStorage.setItem('token', token); // Or prefer cookie
-      
+
       // 2. Fetch User Data
       const fetchUser = async () => {
         try {
-          const { data } = await axios.get('http://localhost:5000/api/auth/me', {
+          const { data } = await api.get('/auth/me', {
             headers: { Authorization: `Bearer ${token}` }
           });
-          
+
           dispatch(loginSuccess(data));
           toast.success(`Welcome back, ${data.name}!`);
           router.push('/account');
         } catch (error) {
-            console.error(error);
-            dispatch(loginFailure("Failed to retrieve user data"));
-            toast.error("Authentication failed. Please try again.");
-            router.push('/login');
+          console.error(error);
+          dispatch(loginFailure("Failed to retrieve user data"));
+          toast.error("Authentication failed. Please try again.");
+          router.push('/login');
         }
       };
 

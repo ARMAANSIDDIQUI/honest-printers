@@ -38,556 +38,556 @@ import Link from "next/link";
 
 export default function LoginPage() {
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const router = useRouter();
+    const router = useRouter();
 
-  const { loading } = useSelector((state) => state.user);
-
-  
-
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-
-  const [registerData, setRegisterData] = useState({ 
-
-    name: "", 
-
-    email: "", 
-
-    password: "", 
-
-    phoneNumber: "",
-
-    address: "",
-
-    avatar: "" 
-
-  });
-
-  const [uploading, setUploading] = useState(false);
-
-  const [showLoginPass, setShowLoginPass] = useState(false);
-
-  const [showRegisterPass, setShowRegisterPass] = useState(false);
+    const { loading } = useSelector((state) => state.user);
 
 
 
-  const handleGoogleLogin = () => {
+    const [loginData, setLoginData] = useState({ email: "", password: "" });
 
-    window.location.href = "http://localhost:5000/api/auth/google";
+    const [registerData, setRegisterData] = useState({
 
-  };
+        name: "",
+
+        email: "",
+
+        password: "",
+
+        phoneNumber: "",
+
+        address: "",
+
+        avatar: ""
+
+    });
+
+    const [uploading, setUploading] = useState(false);
+
+    const [showLoginPass, setShowLoginPass] = useState(false);
+
+    const [showRegisterPass, setShowRegisterPass] = useState(false);
+
+
+
+    const handleGoogleLogin = () => {
+
+        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+
+    };
 
 
 
 
 
-  const handleLogin = async (e) => {
+    const handleLogin = async (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    dispatch(loginStart());
+        dispatch(loginStart());
 
-    
 
-    try {
 
-        const { data } = await api.post('/auth/login', loginData);
+        try {
 
-        localStorage.setItem('token', data.token);
+            const { data } = await api.post('/auth/login', loginData);
 
-        
+            localStorage.setItem('token', data.token);
 
-        dispatch(loginSuccess(data));
 
-        toast.success(`Welcome back, ${data.name}!`);
 
-        
+            dispatch(loginSuccess(data));
 
-        if (data.role === 'admin') {
+            toast.success(`Welcome back, ${data.name}!`);
 
-            router.push('/admin');
 
-        } else {
 
-            router.push('/account');
+            if (data.role === 'admin') {
+
+                router.push('/admin');
+
+            } else {
+
+                router.push('/account');
+
+            }
+
+        } catch (error) {
+
+            const message = error.response?.data?.message || "Login failed";
+
+            dispatch(loginFailure(message));
+
+            toast.error(message);
 
         }
 
-    } catch (error) {
+    };
 
-        const message = error.response?.data?.message || "Login failed";
 
-        dispatch(loginFailure(message));
 
-        toast.error(message);
+    const handleImageUpload = async (e) => {
 
-    }
+        const file = e.target.files[0];
 
-  };
+        if (!file) return;
 
 
 
-  const handleImageUpload = async (e) => {
+        const formData = new FormData();
 
-    const file = e.target.files[0];
+        formData.append('image', file);
 
-    if (!file) return;
 
 
+        setUploading(true);
 
-    const formData = new FormData();
+        try {
 
-    formData.append('image', file);
+            const { data } = await api.post('/upload', formData, {
 
+                headers: { 'Content-Type': 'multipart/form-data' }
 
+            });
 
-    setUploading(true);
+            setRegisterData(prev => ({ ...prev, avatar: data.url }));
 
-    try {
+            toast.success("Image uploaded!");
 
-        const { data } = await api.post('/upload', formData, {
+        } catch (error) {
 
-            headers: { 'Content-Type': 'multipart/form-data' }
+            toast.error("Upload failed");
 
-        });
+        } finally {
 
-        setRegisterData(prev => ({ ...prev, avatar: data.url }));
+            setUploading(false);
 
-        toast.success("Image uploaded!");
+        }
 
-    } catch (error) {
+    };
 
-        toast.error("Upload failed");
 
-    } finally {
 
-        setUploading(false);
+    const handleRegister = async (e) => {
 
-    }
+        e.preventDefault();
 
-  };
+        dispatch(loginStart());
 
 
 
-  const handleRegister = async (e) => {
+        try {
 
-    e.preventDefault();
+            const { data } = await api.post('/auth/register', registerData);
 
-    dispatch(loginStart());
+            localStorage.setItem('token', data.token);
 
-    
 
-    try {
 
-        const { data } = await api.post('/auth/register', registerData);
+            dispatch(loginSuccess(data));
 
-        localStorage.setItem('token', data.token);
+            toast.success("Account created successfully!");
 
-        
+            router.push('/account');
 
-        dispatch(loginSuccess(data));
+        } catch (error) {
 
-        toast.success("Account created successfully!");
+            const message = error.response?.data?.message || "Registration failed";
 
-        router.push('/account');
+            dispatch(loginFailure(message));
 
-    } catch (error) {
+            toast.error(message);
 
-        const message = error.response?.data?.message || "Registration failed";
+        }
 
-        dispatch(loginFailure(message));
+    };
 
-        toast.error(message);
 
-    }
 
-  };
+    return (
 
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors flex flex-col">
 
+            <StarryBackground />
 
-  return (
+            <Navbar />
 
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors flex flex-col">
+            <main className="flex-1 flex items-center justify-center pt-20 pb-20 px-4">
 
-      <StarryBackground />
+                <div className="w-full max-w-md relative z-10">
 
-      <Navbar />
+                    <motion.div
 
-      <main className="flex-1 flex items-center justify-center pt-20 pb-20 px-4">
+                        initial={{ opacity: 0, y: 20 }}
 
-        <div className="w-full max-w-md relative z-10">
+                        animate={{ opacity: 1, y: 0 }}
 
-            <motion.div
+                        transition={{ duration: 0.5 }}
 
-                initial={{ opacity: 0, y: 20 }}
+                        className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden"
 
-                animate={{ opacity: 1, y: 0 }}
+                    >
 
-                transition={{ duration: 0.5 }}
+                        <div className="p-8 text-center border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
 
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden"
+                            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome Back</h1>
 
-            >
-
-                <div className="p-8 text-center border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-
-                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome Back</h1>
-
-                    <p className="text-sm text-slate-500 mt-2">Sign in to access your downloads and account.</p>
-
-                </div>
-
-
-
-                <div className="p-6">
-
-                    <div className="mb-6">
-
-                        <Button 
-
-                            variant="outline" 
-
-                            className="w-full gap-2 py-5 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
-
-                            onClick={handleGoogleLogin}
-
-                        >
-
-                            <FaGoogle className="w-4 h-4 text-red-500" />
-
-                            Sign in with Google
-
-                        </Button>
-
-                        
-
-                        <div className="relative my-6">
-
-                            <div className="absolute inset-0 flex items-center">
-
-                                <div className="w-full border-t border-slate-100 dark:border-slate-800" />
-
-                            </div>
-
-                            <div className="relative flex justify-center text-xs uppercase">
-
-                                <span className="bg-white dark:bg-slate-900 px-2 text-slate-500">Or continue with</span>
-
-                            </div>
+                            <p className="text-sm text-slate-500 mt-2">Sign in to access your downloads and account.</p>
 
                         </div>
 
-                    </div>
+
+
+                        <div className="p-6">
+
+                            <div className="mb-6">
+
+                                <Button
+
+                                    variant="outline"
+
+                                    className="w-full gap-2 py-5 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+
+                                    onClick={handleGoogleLogin}
+
+                                >
+
+                                    <FaGoogle className="w-4 h-4 text-red-500" />
+
+                                    Sign in with Google
+
+                                </Button>
 
 
 
-                    <Tabs defaultValue="login" className="w-full">
+                                <div className="relative my-6">
 
-                        <TabsList className="grid w-full grid-cols-2 mb-6">
+                                    <div className="absolute inset-0 flex items-center">
 
-                            <TabsTrigger value="login">Login</TabsTrigger>
+                                        <div className="w-full border-t border-slate-100 dark:border-slate-800" />
 
-                            <TabsTrigger value="register">Register</TabsTrigger>
+                                    </div>
 
-                        </TabsList>
+                                    <div className="relative flex justify-center text-xs uppercase">
 
-                        
-
-                        <TabsContent value="login">
-
-                            <form onSubmit={handleLogin} className="space-y-4">
-
-                                <div className="space-y-2">
-
-                                    <Label htmlFor="email">Email Address</Label>
-
-                                    <div className="relative">
-
-                                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-
-                                        <Input 
-
-                                            id="email" 
-
-                                            type="email" 
-
-                                            placeholder="name@example.com" 
-
-                                            className="pl-9" 
-
-                                            required 
-
-                                            value={loginData.email}
-
-                                            onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-
-                                        />
+                                        <span className="bg-white dark:bg-slate-900 px-2 text-slate-500">Or continue with</span>
 
                                     </div>
 
                                 </div>
 
-                                                                <div className="space-y-2">
+                            </div>
 
-                                                                    <div className="flex items-center justify-between">
 
-                                                                        <Label htmlFor="password">Password</Label>
 
-                                                                        <Link href="/forgot-password" className="text-xs text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
+                            <Tabs defaultValue="login" className="w-full">
 
-                                                                    </div>
+                                <TabsList className="grid w-full grid-cols-2 mb-6">
 
-                                                                    <div className="relative">
+                                    <TabsTrigger value="login">Login</TabsTrigger>
 
-                                                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                    <TabsTrigger value="register">Register</TabsTrigger>
 
-                                                                        <Input 
+                                </TabsList>
 
-                                                                            id="password" 
 
-                                                                            type={showLoginPass ? "text" : "password"} 
 
-                                                                            placeholder="••••••••" 
+                                <TabsContent value="login">
 
-                                                                            className="pl-9 pr-10" 
+                                    <form onSubmit={handleLogin} className="space-y-4">
 
-                                                                            required 
+                                        <div className="space-y-2">
 
-                                                                            value={loginData.password}
+                                            <Label htmlFor="email">Email Address</Label>
 
-                                                                            onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                            <div className="relative">
 
-                                                                        />
+                                                <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
 
-                                                                        <button 
+                                                <Input
 
-                                                                            type="button"
+                                                    id="email"
 
-                                                                            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                                                    type="email"
 
-                                                                            onClick={() => setShowLoginPass(!showLoginPass)}
+                                                    placeholder="name@example.com"
 
-                                                                        >
+                                                    className="pl-9"
 
-                                                                            {showLoginPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                    required
 
-                                                                        </button>
+                                                    value={loginData.email}
 
-                                                                    </div>
+                                                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
 
-                                                                </div>
-
-                                
-
-                                <Button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
-
-                                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-
-                                    Sign In
-
-                                </Button>
-
-                            </form>
-
-                        </TabsContent>
-
-                        
-
-                        <TabsContent value="register">
-
-                            <form onSubmit={handleRegister} className="space-y-4">
-
-                                <div className="flex justify-center mb-4">
-
-                                    <div className="relative group w-20 h-20 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-
-                                        {registerData.avatar ? (
-
-                                            <img src={registerData.avatar} alt="Avatar" className="w-full h-full object-cover" />
-
-                                        ) : (
-
-                                            <div className="w-full h-full flex items-center justify-center">
-
-                                                <User className="w-8 h-8 text-slate-400" />
+                                                />
 
                                             </div>
 
-                                        )}
+                                        </div>
 
-                                        <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
+                                        <div className="space-y-2">
 
-                                            {uploading ? <Loader2 className="w-5 h-5 text-white animate-spin" /> : <Camera className="w-5 h-5 text-white" />}
+                                            <div className="flex items-center justify-between">
 
-                                            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+                                                <Label htmlFor="password">Password</Label>
 
-                                        </label>
+                                                <Link href="/forgot-password" className="text-xs text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
 
-                                    </div>
+                                            </div>
 
-                                </div>
+                                            <div className="relative">
 
+                                                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
 
+                                                <Input
 
-                                <div className="grid grid-cols-2 gap-4">
+                                                    id="password"
 
-                                    <div className="space-y-2">
+                                                    type={showLoginPass ? "text" : "password"}
 
-                                        <Label htmlFor="name">Full Name</Label>
+                                                    placeholder="••••••••"
 
-                                        <Input 
+                                                    className="pl-9 pr-10"
 
-                                            id="name" 
+                                                    required
 
-                                            placeholder="John Doe" 
+                                                    value={loginData.password}
 
-                                            required 
+                                                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
 
-                                            value={registerData.name}
+                                                />
 
-                                            onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                                                <button
 
-                                        />
+                                                    type="button"
 
-                                    </div>
+                                                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
 
-                                    <div className="space-y-2">
+                                                    onClick={() => setShowLoginPass(!showLoginPass)}
 
-                                        <Label htmlFor="phone">Phone</Label>
+                                                >
 
-                                        <Input 
+                                                    {showLoginPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
 
-                                            id="phone" 
+                                                </button>
 
-                                            placeholder="9876543210" 
+                                            </div>
 
-                                            required 
+                                        </div>
 
-                                            value={registerData.phoneNumber}
 
-                                            onChange={(e) => setRegisterData({...registerData, phoneNumber: e.target.value})}
 
-                                        />
+                                        <Button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
 
-                                    </div>
+                                            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
 
-                                </div>
+                                            Sign In
 
+                                        </Button>
 
+                                    </form>
 
-                                <div className="space-y-2">
+                                </TabsContent>
 
-                                    <Label htmlFor="address">Address</Label>
 
-                                    <Input 
 
-                                        id="address" 
+                                <TabsContent value="register">
 
-                                        placeholder="123 Main St, City" 
+                                    <form onSubmit={handleRegister} className="space-y-4">
 
-                                        value={registerData.address}
+                                        <div className="flex justify-center mb-4">
 
-                                        onChange={(e) => setRegisterData({...registerData, address: e.target.value})}
+                                            <div className="relative group w-20 h-20 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
 
-                                    />
+                                                {registerData.avatar ? (
 
-                                </div>
+                                                    <img src={registerData.avatar} alt="Avatar" className="w-full h-full object-cover" />
 
+                                                ) : (
 
+                                                    <div className="w-full h-full flex items-center justify-center">
 
-                                <div className="space-y-2">
+                                                        <User className="w-8 h-8 text-slate-400" />
 
-                                    <Label htmlFor="register-email">Email Address</Label>
+                                                    </div>
 
-                                    <Input 
+                                                )}
 
-                                        id="register-email" 
+                                                <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
 
-                                        type="email" 
+                                                    {uploading ? <Loader2 className="w-5 h-5 text-white animate-spin" /> : <Camera className="w-5 h-5 text-white" />}
 
-                                        placeholder="name@example.com" 
+                                                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
 
-                                        required 
+                                                </label>
 
-                                        value={registerData.email}
+                                            </div>
 
-                                        onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                                        </div>
 
-                                    />
 
-                                </div>
 
-                                                                <div className="space-y-2">
+                                        <div className="grid grid-cols-2 gap-4">
 
-                                                                    <Label htmlFor="register-password">Password</Label>
+                                            <div className="space-y-2">
 
-                                                                    <div className="relative">
+                                                <Label htmlFor="name">Full Name</Label>
 
-                                                                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                                <Input
 
-                                                                        <Input 
+                                                    id="name"
 
-                                                                            id="register-password" 
+                                                    placeholder="John Doe"
 
-                                                                            type={showRegisterPass ? "text" : "password"}
+                                                    required
 
-                                                                            placeholder="Create a password" 
+                                                    value={registerData.name}
 
-                                                                            className="pl-9 pr-10" 
+                                                    onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
 
-                                                                            required 
+                                                />
 
-                                                                            value={registerData.password}
+                                            </div>
 
-                                                                            onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                                            <div className="space-y-2">
 
-                                                                        />
+                                                <Label htmlFor="phone">Phone</Label>
 
-                                                                        <button 
+                                                <Input
 
-                                                                            type="button"
+                                                    id="phone"
 
-                                                                            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                                                    placeholder="9876543210"
 
-                                                                            onClick={() => setShowRegisterPass(!showRegisterPass)}
+                                                    required
 
-                                                                        >
+                                                    value={registerData.phoneNumber}
 
-                                                                            {showRegisterPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                    onChange={(e) => setRegisterData({ ...registerData, phoneNumber: e.target.value })}
 
-                                                                        </button>
+                                                />
 
-                                                                    </div>
+                                            </div>
 
-                                                                </div>
+                                        </div>
 
-                                <Button type="submit" disabled={loading || uploading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
 
-                                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
 
-                                    Create Account
+                                        <div className="space-y-2">
 
-                                </Button>
+                                            <Label htmlFor="address">Address</Label>
 
-                            </form>
+                                            <Input
 
-                        </TabsContent>
+                                                id="address"
 
-                    </Tabs>
+                                                placeholder="123 Main St, City"
+
+                                                value={registerData.address}
+
+                                                onChange={(e) => setRegisterData({ ...registerData, address: e.target.value })}
+
+                                            />
+
+                                        </div>
+
+
+
+                                        <div className="space-y-2">
+
+                                            <Label htmlFor="register-email">Email Address</Label>
+
+                                            <Input
+
+                                                id="register-email"
+
+                                                type="email"
+
+                                                placeholder="name@example.com"
+
+                                                required
+
+                                                value={registerData.email}
+
+                                                onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+
+                                            />
+
+                                        </div>
+
+                                        <div className="space-y-2">
+
+                                            <Label htmlFor="register-password">Password</Label>
+
+                                            <div className="relative">
+
+                                                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+
+                                                <Input
+
+                                                    id="register-password"
+
+                                                    type={showRegisterPass ? "text" : "password"}
+
+                                                    placeholder="Create a password"
+
+                                                    className="pl-9 pr-10"
+
+                                                    required
+
+                                                    value={registerData.password}
+
+                                                    onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+
+                                                />
+
+                                                <button
+
+                                                    type="button"
+
+                                                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+
+                                                    onClick={() => setShowRegisterPass(!showRegisterPass)}
+
+                                                >
+
+                                                    {showRegisterPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                        <Button type="submit" disabled={loading || uploading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+
+                                            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+
+                                            Create Account
+
+                                        </Button>
+
+                                    </form>
+
+                                </TabsContent>
+
+                            </Tabs>
+
+                        </div>
+
+                    </motion.div>
 
                 </div>
 
-            </motion.div>
+            </main>
+
+            <Footer />
 
         </div>
 
-      </main>
-
-      <Footer />
-
-    </div>
-
-  );
+    );
 
 }
