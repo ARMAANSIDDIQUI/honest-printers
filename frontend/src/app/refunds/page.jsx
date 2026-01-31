@@ -27,7 +27,7 @@ export default function RefundPage() {
     return (
         <div className="min-h-screen transition-colors">
             <Navbar />
-            <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto mb-16">

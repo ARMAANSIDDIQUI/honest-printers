@@ -57,7 +57,7 @@ export default function CheckoutPage() {
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
                 <Navbar />
-                <div className="pt-32 pb-20 text-center">
+                <div className="pb-20 text-center">
                     <h1 className="text-2xl font-bold">Your cart is empty</h1>
                 </div>
             </div>
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
             <StarryBackground />
             <Navbar />
-            <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-3 mb-8">
                     <Lock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Secure Checkout</h1>

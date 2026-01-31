@@ -61,7 +61,7 @@ function ProductsPageContent() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <StarryBackground />
       <Navbar />
-      <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

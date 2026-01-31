@@ -24,7 +24,7 @@ export default function CartPage() {
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
         <StarryBackground />
         <Navbar />
-        <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
             <div className="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-full flex items-center justify-center mb-6 border border-slate-200 dark:border-slate-800">
               <ShoppingBag className="w-10 h-10 text-slate-400 dark:text-slate-500" />
@@ -49,7 +49,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <StarryBackground />
       <Navbar />
-      <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">Shopping Cart</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -68,7 +68,7 @@ export default function CartPage() {
                   <div className="relative w-full sm:w-32 aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
-                  
+
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start gap-4">
@@ -89,7 +89,7 @@ export default function CartPage() {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between mt-4">
                       <div className="flex items-center gap-2 text-sm text-slate-500">
                         Qty: {item.quantity}
@@ -106,14 +106,14 @@ export default function CartPage() {
                 </motion.div>
               ))}
             </AnimatePresence>
-            
+
             <div className="flex justify-end pt-4">
-                <button
-                    onClick={() => dispatch(clearCart())}
-                    className="text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
-                >
-                    Clear Cart
-                </button>
+              <button
+                onClick={() => dispatch(clearCart())}
+                className="text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+              >
+                Clear Cart
+              </button>
             </div>
           </div>
 
@@ -121,7 +121,7 @@ export default function CartPage() {
           <div className="lg:col-span-1">
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm sticky top-24">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Order Summary</h2>
-              
+
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between text-slate-600 dark:text-slate-400">
                   <span>Subtotal</span>
@@ -136,19 +136,19 @@ export default function CartPage() {
                   <span>{formatPrice(finalTotal)}</span>
                 </div>
               </div>
-              
+
               <Link href="/checkout" className="block mt-8">
                 <Button size="lg" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20">
                   Proceed to Checkout
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              
+
               <div className="mt-6 flex items-center justify-center gap-4 text-slate-400 opacity-60">
-                 {/* Payment Icons Placeholder */}
-                 <div className="h-6 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                 <div className="h-6 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
-                 <div className="h-6 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                {/* Payment Icons Placeholder */}
+                <div className="h-6 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                <div className="h-6 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
+                <div className="h-6 w-10 bg-slate-200 dark:bg-slate-800 rounded"></div>
               </div>
               <p className="mt-4 text-xs text-center text-slate-500 dark:text-slate-400">
                 Secure checkout powered by Stripe.
