@@ -17,38 +17,39 @@ import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/data/products";
 
 import { ProductDialog } from "@/components/admin/ProductDialog";
+import { DiscountDialog } from "@/components/admin/DiscountDialog";
 
 import { toast } from "sonner";
 
 import {
 
-  Table,
+    Table,
 
-  TableBody,
+    TableBody,
 
-  TableCell,
+    TableCell,
 
-  TableHead,
+    TableHead,
 
-  TableHeader,
+    TableHeader,
 
-  TableRow,
+    TableRow,
 
 } from "@/components/ui/table";
 
 import {
 
-  DropdownMenu,
+    DropdownMenu,
 
-  DropdownMenuContent,
+    DropdownMenuContent,
 
-  DropdownMenuItem,
+    DropdownMenuItem,
 
-  DropdownMenuLabel,
+    DropdownMenuLabel,
 
-  DropdownMenuSeparator,
+    DropdownMenuSeparator,
 
-  DropdownMenuTrigger,
+    DropdownMenuTrigger,
 
 } from "@/components/ui/dropdown-menu";
 
@@ -56,292 +57,312 @@ import {
 
 export default function AdminProductsPage() {
 
-  const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [editingProduct, setEditingProduct] = useState(null);
+    const [editingProduct, setEditingProduct] = useState(null);
 
+    // Discount States
+    const [discountOpen, setDiscountOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
 
-  const fetchProducts = async () => {
 
-    setLoading(true);
+    const fetchProducts = async () => {
 
-    try {
+        setLoading(true);
 
-      const { data } = await api.get('/products');
+        try {
 
-      setProducts(data.products);
+            const { data } = await api.get('/products');
 
-    } catch (error) {
+            setProducts(data.products);
 
-      console.error("Failed to fetch products", error);
+        } catch (error) {
 
-      toast.error("Failed to fetch products");
+            console.error("Failed to fetch products", error);
 
-    } finally {
+            toast.error("Failed to fetch products");
 
-      setLoading(false);
+        } finally {
 
-    }
+            setLoading(false);
 
-  };
+        }
 
+    };
 
 
-  useEffect(() => {
 
-    fetchProducts();
+    useEffect(() => {
 
-  }, []);
+        fetchProducts();
 
+    }, []);
 
 
-  const handleAdd = () => {
 
-      setEditingProduct(null);
+    const handleAdd = () => {
 
-      setDialogOpen(true);
+        setEditingProduct(null);
 
-  };
+        setDialogOpen(true);
 
+    };
 
 
-  const handleEdit = (product) => {
 
-      setEditingProduct(product);
+    const handleEdit = (product) => {
 
-      setDialogOpen(true);
+        setEditingProduct(product);
 
-  };
+        setDialogOpen(true);
 
+    };
 
 
-  const handleDelete = async (id) => {
 
-      if(!confirm("Are you sure? This cannot be undone.")) return;
+    const handleDelete = async (id) => {
 
-      try {
+        if (!confirm("Are you sure? This cannot be undone.")) return;
 
-          await api.delete(`/products/${id}`);
+        try {
 
-          toast.success("Product deleted");
+            await api.delete(`/products/${id}`);
 
-          fetchProducts();
+            toast.success("Product deleted");
 
-      } catch (error) {
+            fetchProducts();
 
-          toast.error("Failed to delete product");
+        } catch (error) {
 
-      }
+            toast.error("Failed to delete product");
 
-  };
+        }
 
+    };
 
 
-  return (
 
-    <div className="space-y-8">
+    return (
 
-        <div className="flex items-center justify-between">
+        <div className="space-y-8">
 
-            <div>
+            <div className="flex items-center justify-between">
 
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Products</h1>
+                <div>
 
-                <p className="text-slate-500">Manage your digital products and variants.</p>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Products</h1>
 
-            </div>
-
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white" onClick={handleAdd}>
-
-                <Plus className="w-4 h-4 mr-2" />
-
-                Add Product
-
-            </Button>
-
-        </div>
-
-
-
-        <ProductDialog 
-
-            open={dialogOpen} 
-
-            onOpenChange={setDialogOpen} 
-
-            productToEdit={editingProduct} 
-
-            onSuccess={fetchProducts} 
-
-        />
-
-
-
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-
-            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4">
-
-                <div className="relative flex-1 max-w-sm">
-
-                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-
-                    <Input placeholder="Search products..." className="pl-9" />
+                    <p className="text-slate-500">Manage your digital products and variants.</p>
 
                 </div>
 
-                <Button variant="outline" className="gap-2">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white" onClick={handleAdd}>
 
-                    <Filter className="w-4 h-4" />
+                    <Plus className="w-4 h-4 mr-2" />
 
-                    Filters
+                    Add Product
 
                 </Button>
 
             </div>
 
-            
 
-            {loading ? (
 
-                <div className="p-12 flex justify-center">
+            <ProductDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                productToEdit={editingProduct}
+                onSuccess={fetchProducts}
+            />
 
-                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            <DiscountDialog
+                open={discountOpen}
+                onOpenChange={setDiscountOpen}
+                product={selectedProduct}
+                onSuccess={fetchProducts}
+            />
+
+            <DiscountDialog
+                open={discountOpen}
+                onOpenChange={setDiscountOpen}
+                product={selectedProduct}
+                onSuccess={fetchProducts}
+            />
+
+
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+
+                <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4">
+
+                    <div className="relative flex-1 max-w-sm">
+
+                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+
+                        <Input placeholder="Search products..." className="pl-9" />
+
+                    </div>
+
+                    <Button variant="outline" className="gap-2">
+
+                        <Filter className="w-4 h-4" />
+
+                        Filters
+
+                    </Button>
 
                 </div>
 
-            ) : (
 
-                <Table>
 
-                    <TableHeader>
+                {loading ? (
 
-                        <TableRow>
+                    <div className="p-12 flex justify-center">
 
-                            <TableHead>Product</TableHead>
+                        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
 
-                            <TableHead>Category</TableHead>
+                    </div>
 
-                            <TableHead>Variants</TableHead>
+                ) : (
 
-                            <TableHead>Price Range</TableHead>
+                    <Table>
 
-                            <TableHead>Status</TableHead>
+                        <TableHeader>
 
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableRow>
 
-                        </TableRow>
+                                <TableHead>Product</TableHead>
 
-                    </TableHeader>
+                                <TableHead>Category</TableHead>
 
-                    <TableBody>
+                                <TableHead>Variants</TableHead>
 
-                        {products.map((product) => {
+                                <TableHead>Price Range</TableHead>
 
-                             const prices = product.variants.map(v => v.price);
+                                <TableHead>Status</TableHead>
 
-                             const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+                                <TableHead className="text-right">Actions</TableHead>
 
-                             const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+                            </TableRow>
 
-                             
+                        </TableHeader>
 
-                             return (
+                        <TableBody>
 
-                                <TableRow key={product._id}>
+                            {products.map((product) => {
 
-                                    <TableCell className="font-medium">
+                                const prices = product.variants.map(v => v.price);
 
-                                        <div className="flex items-center gap-3">
+                                const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
 
-                                            <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
-                                                <img src={product.thumbnail} alt="" className="w-full h-full object-cover" />
+
+
+                                return (
+
+                                    <TableRow key={product._id}>
+
+                                        <TableCell className="font-medium">
+
+                                            <div className="flex items-center gap-3">
+
+                                                <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden">
+
+                                                    <img src={product.thumbnail} alt="" className="w-full h-full object-cover" />
+
+                                                </div>
+
+                                                <span className="truncate max-w-[200px]">{product.name}</span>
 
                                             </div>
 
-                                            <span className="truncate max-w-[200px]">{product.name}</span>
+                                        </TableCell>
 
-                                        </div>
+                                        <TableCell className="capitalize">{product.categoryId.replace('-', ' ')}</TableCell>
 
-                                    </TableCell>
+                                        <TableCell>{product.variants.length} Variants</TableCell>
 
-                                    <TableCell className="capitalize">{product.categoryId.replace('-', ' ')}</TableCell>
+                                        <TableCell>
 
-                                    <TableCell>{product.variants.length} Variants</TableCell>
+                                            {formatPrice(minPrice)} - {formatPrice(maxPrice)}
 
-                                    <TableCell>
+                                        </TableCell>
 
-                                        {formatPrice(minPrice)} - {formatPrice(maxPrice)}
+                                        <TableCell>
 
-                                    </TableCell>
+                                            <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Active</Badge>
 
-                                    <TableCell>
+                                        </TableCell>
 
-                                        <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Active</Badge>
+                                        <TableCell className="text-right">
 
-                                    </TableCell>
+                                            <DropdownMenu>
 
-                                    <TableCell className="text-right">
+                                                <DropdownMenuTrigger asChild>
 
-                                        <DropdownMenu>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
 
-                                            <DropdownMenuTrigger asChild>
+                                                        <span className="sr-only">Open menu</span>
 
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <MoreHorizontal className="h-4 w-4" />
 
-                                                    <span className="sr-only">Open menu</span>
+                                                    </Button>
 
-                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </DropdownMenuTrigger>
 
-                                                </Button>
+                                                <DropdownMenuContent align="end">
 
-                                            </DropdownMenuTrigger>
+                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-                                            <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem onClick={() => handleEdit(product)}>
 
-                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                        <Edit className="w-4 h-4 mr-2" /> Edit
 
-                                                <DropdownMenuItem onClick={() => handleEdit(product)}>
+                                                    </DropdownMenuItem>
 
-                                                    <Edit className="w-4 h-4 mr-2" /> Edit
+                                                    <DropdownMenuItem onClick={() => {
+                                                        setSelectedProduct(product);
+                                                        setDiscountOpen(true);
+                                                    }}>
+                                                        <Badge className="w-4 h-4 mr-2 flex items-center justify-center p-0 text-[10px]">%</Badge> Manage Discount
+                                                    </DropdownMenuItem>
 
-                                                </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
 
-                                                <DropdownMenuSeparator />
+                                                    <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product._id)}>
 
-                                                <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product._id)}>
+                                                        <Trash className="w-4 h-4 mr-2" /> Delete
 
-                                                    <Trash className="w-4 h-4 mr-2" /> Delete
+                                                    </DropdownMenuItem>
 
-                                                </DropdownMenuItem>
+                                                </DropdownMenuContent>
 
-                                            </DropdownMenuContent>
+                                            </DropdownMenu>
 
-                                        </DropdownMenu>
+                                        </TableCell>
 
-                                    </TableCell>
+                                    </TableRow>
 
-                                </TableRow>
+                                );
 
-                             );
+                            })}
 
-                        })}
+                        </TableBody>
 
-                    </TableBody>
+                    </Table>
 
-                </Table>
+                )}
 
-            )}
+            </div>
 
         </div>
 
-    </div>
-
-  );
+    );
 
 }

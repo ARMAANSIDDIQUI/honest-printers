@@ -163,3 +163,42 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
     throw new Error('Product not found');
   }
 });
+
+// @desc    Apply discount to product variants
+// @route   PUT /api/products/:id/discount
+// @access  Private/Admin
+exports.applyDiscount = asyncHandler(async (req, res) => {
+  const { discountPercentage } = req.body;
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const discount = Number(discountPercentage);
+
+    if (isNaN(discount) || discount < 0 || discount > 100) {
+      res.status(400);
+      throw new Error('Invalid discount percentage');
+    }
+
+    product.variants = product.variants.map((variant) => {
+      // Ensure originalPrice is set
+      if (!variant.originalPrice || variant.originalPrice === variant.price) {
+        variant.originalPrice = variant.price;
+      }
+
+      if (discount === 0) {
+        // Remove discount: restore price to original
+        variant.price = variant.originalPrice;
+      } else {
+        // Apply discount
+        variant.price = Math.round(variant.originalPrice * (1 - discount / 100));
+      }
+      return variant;
+    });
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+});
