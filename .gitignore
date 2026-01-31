@@ -4,3 +4,13 @@ node_modules
 .vscode
 .idea
 *.log
+
+# Local builds & Distributables
+build/
+dist/
+.next/
+out/
+.vercel/
+coverage/
+*.tsbuildinfo
+

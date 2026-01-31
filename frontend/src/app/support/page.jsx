@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { HelpCircle, Mail, FileText, MessageSquare, Shield, RefreshCw } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
+import { StaticNavbar } from "@/components/StaticNavbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 
@@ -49,7 +49,7 @@ export default function SupportPage() {
 
     return (
         <div className="min-h-screen transition-colors">
-            <Navbar />
+            <StaticNavbar />
             <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header */}

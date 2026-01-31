@@ -86,9 +86,9 @@ export default function RootLayout({
       <body className={`${outfit.className} antialiased`}>
         <ClientProtection />
         <StructData />
-        <InstallPwaProvider>
-          <NotificationProvider>
-            <ReduxProvider>
+        <ReduxProvider>
+          <InstallPwaProvider>
+            <NotificationProvider>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="dark"
@@ -104,9 +104,9 @@ export default function RootLayout({
                 {children}
                 <Toaster richColors closeButton position="top-center" />
               </ThemeProvider>
-            </ReduxProvider>
-          </NotificationProvider>
-        </InstallPwaProvider>
+            </NotificationProvider>
+          </InstallPwaProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

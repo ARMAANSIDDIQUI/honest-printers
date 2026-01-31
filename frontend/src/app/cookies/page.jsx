@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Cookie, Shield, BarChart3, Settings } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
+import { StaticNavbar } from "@/components/StaticNavbar";
 import { Footer } from "@/components/Footer";
 
 export default function CookiesPage() {
@@ -29,7 +29,7 @@ export default function CookiesPage() {
 
     return (
         <div className="min-h-screen transition-colors">
-            <Navbar />
+            <StaticNavbar />
             <main className="relative pt-4 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header */}

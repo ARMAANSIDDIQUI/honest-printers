@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/Navbar";
+import { StaticNavbar } from "@/components/StaticNavbar";
 import { StarryBackground } from "@/components/StarryBackground";
 import { Footer } from "@/components/Footer";
 import { StaticPageHeader } from "@/components/StaticPageHeader";
@@ -39,7 +39,7 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen relative overflow-hidden transition-colors duration-500">
       <StarryBackground />
-      <Navbar />
+      <StaticNavbar />
       <main className="relative z-10">
         <StaticPageHeader
           title="Frequently Asked Questions"
