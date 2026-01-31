@@ -8,6 +8,8 @@ const passport = require('passport');
 
 // Load Passport Config
 require('./config/passport');
+const connectDB = require('./config/db');
+const mongoose = require('mongoose');
 
 const app = express();
 
