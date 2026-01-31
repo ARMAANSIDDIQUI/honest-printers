@@ -7,7 +7,7 @@ const crypto = require('crypto');
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d', // User login validity set to 30 days
+    expiresIn: process.env.JWT_EXPIRE || '30d', // User login validity set to 30 days (default)
   });
 };
 
@@ -53,7 +53,7 @@ exports.register = asyncHandler(async (req, res) => {
     }
 
     const token = generateToken(user._id);
-    
+
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -128,7 +128,7 @@ exports.updateProfile = asyncHandler(async (req, res) => {
     user.countryCode = req.body.countryCode || user.countryCode;
     user.avatar = req.body.avatar || user.avatar;
     user.address = req.body.address || user.address;
-    
+
     if (req.body.password) {
       user.password = req.body.password;
     }
