@@ -240,7 +240,7 @@ export default function LoginPage() {
 
 
 
-                        <div className="p-6">
+                        <div className="p-6 pt-8">
 
                             <div className="mb-6">
 
