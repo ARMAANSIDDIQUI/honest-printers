@@ -6,6 +6,7 @@ import ClientProtection from "@/components/ClientProtection";
 import { StarryBackground } from "@/components/StarryBackground";
 import MeteorBackground from "@/components/MeteorBackground";
 import StructData from "@/components/StructData";
+import { InstallPwaProvider } from "@/context/InstallPwaContext";
 
 export const viewport = {
   themeColor: "#4f46e5",
@@ -82,23 +83,25 @@ export default function RootLayout({
       <body className="antialiased">
         <ClientProtection />
         <StructData />
-        <ReduxProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="hidden dark:block">
-              <StarryBackground />
-            </div>
-            <div className="block dark:hidden">
-              <MeteorBackground />
-            </div>
-            {children}
-            <Toaster richColors closeButton position="top-center" />
-          </ThemeProvider>
-        </ReduxProvider>
+        <InstallPwaProvider>
+          <ReduxProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <div className="hidden dark:block">
+                <StarryBackground />
+              </div>
+              <div className="block dark:hidden">
+                <MeteorBackground />
+              </div>
+              {children}
+              <Toaster richColors closeButton position="top-center" />
+            </ThemeProvider>
+          </ReduxProvider>
+        </InstallPwaProvider>
       </body>
     </html>
   );

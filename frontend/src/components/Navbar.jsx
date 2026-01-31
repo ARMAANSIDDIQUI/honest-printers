@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogIn, LayoutDashboard } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, ChevronDown, LogIn, LayoutDashboard, Download } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useSelector } from "react-redux";
 import api from "@/lib/api";
+import { useInstallPwa } from "@/context/InstallPwaContext";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -22,6 +23,7 @@ export function Navbar() {
   const [categories, setCategories] = useState([]);
   const cartItemCount = useSelector((state) => state.cart.totalItems);
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { install, isInstallable } = useInstallPwa();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -105,6 +107,15 @@ export function Navbar() {
             </div>
 
             <div className="flex items-center gap-1 sm:gap-3">
+              {isInstallable && (
+                <button
+                  onClick={install}
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-full transition-colors shadow-lg shadow-indigo-500/20"
+                >
+                  <Download className="w-3 h-3" />
+                  Install App
+                </button>
+              )}
               <ThemeToggle />
 
               <button
