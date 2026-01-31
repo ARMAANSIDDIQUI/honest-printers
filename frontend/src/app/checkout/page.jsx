@@ -12,10 +12,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function CheckoutPage() {
     const { items, totalAmount } = useSelector((state) => state.cart);
+    const { isAuthenticated, loading } = useSelector((state) => state.user);
     const [isProcessing, setIsProcessing] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!loading && !isAuthenticated) {
+            toast.error("Please login to complete your purchase");
+            router.push("/login?redirect=/checkout");
+        }
+    }, [isAuthenticated, loading, router]);
+
+    if (loading) {
+        return null; // Or a loading spinner
+    }
+
+    if (!isAuthenticated) {
+        return null; // Prevent flash of content before redirect
+    }
 
     const gstRate = 0.18;
     const gstAmount = totalAmount * gstRate;
