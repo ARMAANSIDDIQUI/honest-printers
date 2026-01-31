@@ -235,9 +235,9 @@ export default function AdminProductsPage() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Product</TableHead>
-                                    <TableHead>Category</TableHead>
-                                    <TableHead>Variants</TableHead>
-                                    <TableHead>Price Range</TableHead>
+                                    <TableHead className="hidden md:table-cell">Category</TableHead>
+                                    <TableHead className="hidden md:table-cell">Variants</TableHead>
+                                    <TableHead className="hidden md:table-cell">Price Range</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
@@ -258,9 +258,9 @@ export default function AdminProductsPage() {
                                                     <span className="truncate max-w-[150px] sm:max-w-[200px]">{product.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="capitalize whitespace-nowrap">{product.categoryId.replace('-', ' ')}</TableCell>
-                                            <TableCell className="whitespace-nowrap">{product.variants.length} Variants</TableCell>
-                                            <TableCell className="whitespace-nowrap">
+                                            <TableCell className="capitalize whitespace-nowrap hidden md:table-cell">{product.categoryId.replace('-', ' ')}</TableCell>
+                                            <TableCell className="whitespace-nowrap hidden md:table-cell">{product.variants.length} Variants</TableCell>
+                                            <TableCell className="whitespace-nowrap hidden md:table-cell">
                                                 {formatPrice(minPrice)} - {formatPrice(maxPrice)}
                                             </TableCell>
                                             <TableCell>

@@ -191,8 +191,8 @@ export default function AccountPage() {
                             transition={{ duration: 0.3 }}
                         >
                             {activeTab === "overview" && (
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-6 p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+                                <div className="space-y-4 sm:space-y-6">
+                                    <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-center sm:text-left">
                                         <div className="relative">
                                             <div className="w-20 h-20 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                                                 <img
@@ -259,7 +259,7 @@ export default function AccountPage() {
                                     ) : (
                                         <div className="space-y-4">
                                             {orders.map((order) => (
-                                                <div key={order._id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+                                                <div key={order._id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-6">
                                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 border-b border-slate-100 dark:border-slate-800 pb-4">
                                                         <div>
                                                             <div className="flex items-center gap-3">
@@ -300,7 +300,7 @@ export default function AccountPage() {
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">Your Downloads</h2>
                                     <div className="grid gap-4">
                                         {orders.filter(o => o.isPaid).flatMap(o => o.orderItems).map((item, i) => (
-                                            <div key={i} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                                            <div key={i} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
                                                 <div className="flex items-start gap-4">
                                                     <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
                                                         <FileDown className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
