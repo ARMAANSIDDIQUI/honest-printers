@@ -1,3 +1,4 @@
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/lib/redux/provider";
@@ -9,6 +10,7 @@ import StructData from "@/components/StructData";
 import { InstallPwaProvider } from "@/context/InstallPwaContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 
+const outfit = Outfit({ subsets: ["latin"] });
 export const viewport = {
   themeColor: "#4f46e5",
   width: "device-width",
@@ -81,7 +83,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
+      <body className={`${outfit.className} antialiased`}>
         <ClientProtection />
         <StructData />
         <InstallPwaProvider>

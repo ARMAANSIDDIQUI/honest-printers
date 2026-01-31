@@ -33,52 +33,52 @@ export function CategoriesSection() {
   }, []);
 
   return (
-    <section className="py-20 lg:py-28">
+    <section className="py-10 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors">
-              Browse by Category
-            </h2>
-            <p className="mt-3 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto transition-colors">
-              Find the perfect template for your project from our curated categories
-            </p>
-          </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors">
+            Browse by Category
+          </h2>
+          <p className="mt-3 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto transition-colors">
+            Find the perfect template for your project from our curated categories
+          </p>
+        </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category._id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+          {categories.map((category, index) => (
+            <motion.div
+              key={category._id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+            >
+              <Link
+                href={`/products?category=${category.slug}`}
+                className="group block relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors"
               >
-                <Link
-                  href={`/products?category=${category.slug}`}
-                  className="group block relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-colors"
-                >
-                  <img
-                    src={category.thumbnail || categoryImages[category.slug] || categoryImages["business-cards"]}
-                    alt={category.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 dark:opacity-60 group-hover:opacity-100 dark:group-hover:opacity-80 transition-opacity"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-200 dark:from-slate-950 via-transparent to-transparent opacity-80 dark:opacity-100" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-end p-4 text-center">
-                    <h3 className="text-slate-900 dark:text-white font-semibold text-base lg:text-lg tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{category.name}</h3>
-                    <span className="text-slate-600 dark:text-slate-300 text-sm mt-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
-                      Browse <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                <img
+                  src={category.thumbnail || categoryImages[category.slug] || categoryImages["business-cards"]}
+                  alt={category.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 dark:opacity-60 group-hover:opacity-100 dark:group-hover:opacity-80 transition-opacity"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-200 dark:from-slate-950 via-transparent to-transparent opacity-80 dark:opacity-100" />
+                <div className="absolute inset-0 flex flex-col items-center justify-end p-4 text-center">
+                  <h3 className="text-slate-900 dark:text-white font-semibold text-base lg:text-lg tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{category.name}</h3>
+                  <span className="text-slate-600 dark:text-slate-300 text-sm mt-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                    Browse <ArrowRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
