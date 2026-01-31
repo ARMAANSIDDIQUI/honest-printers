@@ -1,13 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
+import { StaticNavbar } from "@/components/StaticNavbar";
 import { Footer } from "@/components/Footer";
 import { StarryBackground } from "@/components/StarryBackground";
 import { Button } from "@/components/ui/button";
-import { ReduxProvider } from "@/lib/redux/provider";
-import { InstallPwaProvider } from "@/context/InstallPwaContext";
-import { NotificationProvider } from "@/context/NotificationContext";
 
 export default function NotFound() {
   return (
