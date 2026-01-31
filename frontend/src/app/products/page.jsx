@@ -1,14 +1,15 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Filter, SlidersHorizontal, Loader2 } from "lucide-react";
+import { Filter, Loader2 } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { StarryBackground } from "@/components/StarryBackground";
 import { Button } from "@/components/ui/button";
+import { ProductFilters } from "@/components/ProductFilters";
 import api from "@/lib/api";
 import {
   DropdownMenu,
@@ -20,42 +21,75 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function ProductsPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const categorySlug = searchParams.get('category');
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState("");
 
+  // Filter States
+  const [sort, setSort] = useState("newest");
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [filters, setFilters] = useState({
+    discount: false,
+    category: categorySlug || ""
+  });
+
+  // Sync category slug changes to state
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        let endpoint = '/products';
-        if (categorySlug) {
-          endpoint += `?category=${categorySlug}`;
-          // Also fetch category details to get the name
-          try {
-            const catRes = await api.get(`/categories/${categorySlug}`);
-            setCategoryName(catRes.data.name);
-          } catch (e) {
-            setCategoryName(categorySlug); // Fallback
-          }
-        } else {
-          setCategoryName("");
-        }
-
-        const response = await api.get(endpoint);
-        setProducts(response.data?.products || []);
-      } catch (error) {
-        console.warn("Failed to fetch products:", error.message);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    if (categorySlug) {
+      setFilters(prev => ({ ...prev, category: categorySlug }));
+    }
   }, [categorySlug]);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      let endpoint = '/products';
+      const params = new URLSearchParams();
+
+      // Category (prefer local filter state, fallback to URL slug)
+      const currentCategory = filters.category || categorySlug;
+      if (currentCategory) params.append('category', currentCategory);
+
+      if (sort) params.append('sort', sort);
+      if (filters.discount) params.append('discount', 'true');
+
+      // Only append price if modified from default or specific Logic
+      if (priceRange[0] > 0) params.append('minPrice', priceRange[0]);
+      if (priceRange[1] < 10000) params.append('maxPrice', priceRange[1]);
+
+      if (currentCategory) {
+        // Also fetch category details to get the name
+        try {
+          const catRes = await api.get(`/categories/${currentCategory}`);
+          setCategoryName(catRes.data.name);
+        } catch (e) {
+          setCategoryName(currentCategory); // Fallback
+        }
+      } else {
+        setCategoryName("");
+      }
+
+      const response = await api.get(`${endpoint}?${params.toString()}`);
+      setProducts(response.data?.products || []);
+    } catch (error) {
+      console.warn("Failed to fetch products:", error.message);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [categorySlug, sort, priceRange, filters]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleSortChange = (value) => {
+    setSort(value);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
@@ -83,24 +117,28 @@ function ProductsPageContent() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="gap-2 border-slate-200 dark:border-slate-800">
-              <SlidersHorizontal className="w-4 h-4" />
-              Filters
-            </Button>
+            <ProductFilters
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              filters={filters}
+              setFilters={setFilters}
+              applyFilters={() => fetchData()}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="gap-2 border-slate-200 dark:border-slate-800">
                   <Filter className="w-4 h-4" />
-                  Sort By
+                  Sort By: {sort.replace('-', ' ').toUpperCase()}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Sort Order</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Newest First</DropdownMenuItem>
-                <DropdownMenuItem>Price: Low to High</DropdownMenuItem>
-                <DropdownMenuItem>Price: High to Low</DropdownMenuItem>
-                <DropdownMenuItem>Popularity</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSortChange("newest")}>Newest First</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSortChange("price-asc")}>Price: Low to High</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSortChange("price-desc")}>Price: High to Low</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleSortChange("relevance")}>Relevance</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

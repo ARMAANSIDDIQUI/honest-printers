@@ -8,21 +8,59 @@ exports.getProducts = asyncHandler(async (req, res) => {
   const pageSize = 12;
   const page = Number(req.query.pageNumber) || 1;
 
-  const keyword = req.query.keyword
-    ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i',
-        },
+  // Build Filter Query
+  const query = {};
+
+  if (req.query.keyword) {
+    query.name = {
+      $regex: req.query.keyword,
+      $options: 'i',
+    };
+  }
+
+  if (req.query.category) {
+    query.categoryId = req.query.category;
+  }
+
+  if (req.query.minPrice || req.query.maxPrice) {
+    query['variants.price'] = {};
+    if (req.query.minPrice) query['variants.price'].$gte = Number(req.query.minPrice);
+    if (req.query.maxPrice) query['variants.price'].$lte = Number(req.query.maxPrice);
+  }
+
+  if (req.query.discount === 'true') {
+    // Check if any variant has price < originalPrice
+    query.variants = {
+      $elemMatch: {
+        $expr: { $lt: ["$price", "$originalPrice"] }
       }
-    : {};
+    };
+  }
 
-  const category = req.query.category 
-    ? { categoryId: req.query.category } 
-    : {};
+  // Build Sort Option
+  let sort = { createdAt: -1 }; // Default: Newest
+  if (req.query.sort) {
+    switch (req.query.sort) {
+      case 'price-asc':
+        sort = { 'variants.price': 1 };
+        break;
+      case 'price-desc':
+        sort = { 'variants.price': -1 };
+        break;
+      case 'relevance':
+        // If keyword exists, relevance is automatic in some setups, 
+        // but for simpleregex, we might just fallback to createdAt or name
+        sort = { createdAt: -1 };
+        break;
+      case 'newest':
+      default:
+        sort = { createdAt: -1 };
+    }
+  }
 
-  const count = await Product.countDocuments({ ...keyword, ...category });
-  const products = await Product.find({ ...keyword, ...category })
+  const count = await Product.countDocuments(query);
+  const products = await Product.find(query)
+    .sort(sort)
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 

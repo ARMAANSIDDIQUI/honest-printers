@@ -2,7 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/lib/redux/provider";
-import { Toaster } from "sonner";
+import { ThemeAwareToaster } from "@/components/ThemeAwareToaster";
 import ClientProtection from "@/components/ClientProtection";
 import { StarryBackground } from "@/components/StarryBackground";
 import MeteorBackground from "@/components/MeteorBackground";
@@ -102,7 +102,7 @@ export default function RootLayout({
                   <MeteorBackground />
                 </div>
                 {children}
-                <Toaster richColors closeButton position="top-center" />
+                <ThemeAwareToaster />
               </ThemeProvider>
             </NotificationProvider>
           </InstallPwaProvider>
