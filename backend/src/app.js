@@ -17,8 +17,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
-    credentials: true
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'https://honestprinters.in',
+      'https://www.honestprinters.in',
+      'https://honestprinters.in',
+      'https://backend.honestprinters.in',
+      'https://www.backend.honestprinters.in'
+    ];
+    // Allow requests with no origin (like mobile apps, curl, or same-origin in some cases)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
 
 if (process.env.NODE_ENV === 'development') {
@@ -40,12 +57,12 @@ app.get('/', (req, res) => {
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode);
-    res.json({
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-    });
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode);
+  res.json({
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
 });
 
 module.exports = app;
