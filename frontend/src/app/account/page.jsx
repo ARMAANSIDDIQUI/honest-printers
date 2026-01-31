@@ -204,7 +204,7 @@ export default function AccountPage() {
                                         </div>
                                         <div>
                                             <h2 className="text-xl font-bold text-slate-900 dark:text-white">{formData.name}</h2>
-                                            <p className="text-slate-500">{formData.email}</p>
+                                            <p className="text-slate-500 truncate max-w-[200px] sm:max-w-none">{formData.email}</p>
                                             <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
                                                 <Phone className="w-3 h-3" />
                                                 {formData.countryCode} {formData.phoneNumber || "No phone number added"}
@@ -283,8 +283,8 @@ export default function AccountPage() {
                                                     <div className="space-y-2">
                                                         {order.orderItems.map((item, idx) => (
                                                             <div key={idx} className="flex justify-between text-sm text-slate-600 dark:text-slate-400">
-                                                                <span>{item.name}</span>
-                                                                <span className="text-slate-400">{item.qty} x {formatPrice(item.price)}</span>
+                                                                <span className="truncate pr-4">{item.name}</span>
+                                                                <span className="text-slate-400 whitespace-nowrap">{item.qty} x {formatPrice(item.price)}</span>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -306,7 +306,7 @@ export default function AccountPage() {
                                                         <FileDown className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="font-bold text-slate-900 dark:text-white">{item.name}</h3>
+                                                        <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1">{item.name}</h3>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             <Badge variant="outline">Standard License</Badge>
                                                         </div>

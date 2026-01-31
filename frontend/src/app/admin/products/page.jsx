@@ -230,132 +230,74 @@ export default function AdminProductsPage() {
 
                 ) : (
 
-                    <Table>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Product</TableHead>
+                                    <TableHead>Category</TableHead>
+                                    <TableHead>Variants</TableHead>
+                                    <TableHead>Price Range</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {products.map((product) => {
+                                    const prices = product.variants.map(v => v.price);
+                                    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+                                    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
-                        <TableHeader>
-
-                            <TableRow>
-
-                                <TableHead>Product</TableHead>
-
-                                <TableHead>Category</TableHead>
-
-                                <TableHead>Variants</TableHead>
-
-                                <TableHead>Price Range</TableHead>
-
-                                <TableHead>Status</TableHead>
-
-                                <TableHead className="text-right">Actions</TableHead>
-
-                            </TableRow>
-
-                        </TableHeader>
-
-                        <TableBody>
-
-                            {products.map((product) => {
-
-                                const prices = product.variants.map(v => v.price);
-
-                                const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-
-                                const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
-
-
-
-                                return (
-
-                                    <TableRow key={product._id}>
-
-                                        <TableCell className="font-medium">
-
-                                            <div className="flex items-center gap-3">
-
-                                                <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden">
-
-                                                    <img src={product.thumbnail} alt="" className="w-full h-full object-cover" />
-
+                                    return (
+                                        <TableRow key={product._id}>
+                                            <TableCell className="font-medium">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden flex-shrink-0">
+                                                        <img src={product.thumbnail} alt="" className="w-full h-full object-cover" />
+                                                    </div>
+                                                    <span className="truncate max-w-[150px] sm:max-w-[200px]">{product.name}</span>
                                                 </div>
-
-                                                <span className="truncate max-w-[200px]">{product.name}</span>
-
-                                            </div>
-
-                                        </TableCell>
-
-                                        <TableCell className="capitalize">{product.categoryId.replace('-', ' ')}</TableCell>
-
-                                        <TableCell>{product.variants.length} Variants</TableCell>
-
-                                        <TableCell>
-
-                                            {formatPrice(minPrice)} - {formatPrice(maxPrice)}
-
-                                        </TableCell>
-
-                                        <TableCell>
-
-                                            <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Active</Badge>
-
-                                        </TableCell>
-
-                                        <TableCell className="text-right">
-
-                                            <DropdownMenu>
-
-                                                <DropdownMenuTrigger asChild>
-
-                                                    <Button variant="ghost" className="h-8 w-8 p-0">
-
-                                                        <span className="sr-only">Open menu</span>
-
-                                                        <MoreHorizontal className="h-4 w-4" />
-
-                                                    </Button>
-
-                                                </DropdownMenuTrigger>
-
-                                                <DropdownMenuContent align="end">
-
-                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-                                                    <DropdownMenuItem onClick={() => handleEdit(product)}>
-
-                                                        <Edit className="w-4 h-4 mr-2" /> Edit
-
-                                                    </DropdownMenuItem>
-
-                                                    <DropdownMenuItem onClick={() => {
-                                                        setSelectedProduct(product);
-                                                        setDiscountOpen(true);
-                                                    }}>
-                                                        <Badge className="w-4 h-4 mr-2 flex items-center justify-center p-0 text-[10px]">%</Badge> Manage Discount
-                                                    </DropdownMenuItem>
-
-                                                    <DropdownMenuSeparator />
-
-                                                    <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product._id)}>
-
-                                                        <Trash className="w-4 h-4 mr-2" /> Delete
-
-                                                    </DropdownMenuItem>
-
-                                                </DropdownMenuContent>
-
-                                            </DropdownMenu>
-
-                                        </TableCell>
-
-                                    </TableRow>
-
-                                );
-
-                            })}
-
-                        </TableBody>
-
-                    </Table>
+                                            </TableCell>
+                                            <TableCell className="capitalize whitespace-nowrap">{product.categoryId.replace('-', ' ')}</TableCell>
+                                            <TableCell className="whitespace-nowrap">{product.variants.length} Variants</TableCell>
+                                            <TableCell className="whitespace-nowrap">
+                                                {formatPrice(minPrice)} - {formatPrice(maxPrice)}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Active</Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" className="h-8 w-8 p-0">
+                                                            <span className="sr-only">Open menu</span>
+                                                            <MoreHorizontal className="h-4 w-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                        <DropdownMenuItem onClick={() => handleEdit(product)}>
+                                                            <Edit className="w-4 h-4 mr-2" /> Edit
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => {
+                                                            setSelectedProduct(product);
+                                                            setDiscountOpen(true);
+                                                        }}>
+                                                            <Badge className="w-4 h-4 mr-2 flex items-center justify-center p-0 text-[10px]">%</Badge> Manage Discount
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product._id)}>
+                                                            <Trash className="w-4 h-4 mr-2" /> Delete
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </div>
 
                 )}
 

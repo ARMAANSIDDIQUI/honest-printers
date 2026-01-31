@@ -83,7 +83,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${outfit.className} antialiased`}>
+      <body className={`${outfit.className} antialiased overflow-x-hidden`}>
         <ClientProtection />
         <StructData />
         <ReduxProvider>

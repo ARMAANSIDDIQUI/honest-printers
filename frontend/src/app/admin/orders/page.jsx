@@ -20,17 +20,17 @@ import { OrderDetailsDialog } from "@/components/admin/OrderDetailsDialog";
 
 import {
 
-  Table,
+    Table,
 
-  TableBody,
+    TableBody,
 
-  TableCell,
+    TableCell,
 
-  TableHead,
+    TableHead,
 
-  TableHeader,
+    TableHeader,
 
-  TableRow,
+    TableRow,
 
 } from "@/components/ui/table";
 
@@ -38,220 +38,177 @@ import {
 
 export default function AdminOrdersPage() {
 
-  const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
-  const [selectedOrder, setSelectedOrder] = useState(null);
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
-
-
-  const fetchOrders = async () => {
-
-    try {
-
-      const { data } = await api.get('/orders');
-
-      setOrders(data);
-
-    } catch (error) {
-
-      console.error("Failed to fetch orders", error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
+    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
 
 
-  useEffect(() => {
+    const fetchOrders = async () => {
 
-    fetchOrders();
+        try {
 
-  }, []);
+            const { data } = await api.get('/orders');
 
+            setOrders(data);
 
+        } catch (error) {
 
-  const handleView = (order) => {
+            console.error("Failed to fetch orders", error);
 
-      setSelectedOrder(order);
+        } finally {
 
-      setIsDetailsOpen(true);
+            setLoading(false);
 
-  };
+        }
 
-
-
-  return (
-
-    <div className="space-y-8">
-
-        <div className="flex items-center justify-between">
-
-            <div>
-
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Orders</h1>
-
-                <p className="text-slate-500">Manage customer orders and transactions.</p>
-
-            </div>
-
-        </div>
+    };
 
 
 
-        <OrderDetailsDialog 
+    useEffect(() => {
 
-            order={selectedOrder} 
+        fetchOrders();
 
-            open={isDetailsOpen} 
-
-            onOpenChange={setIsDetailsOpen}
-
-            onUpdate={fetchOrders}
-
-        />
+    }, []);
 
 
 
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+    const handleView = (order) => {
 
-            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4">
+        setSelectedOrder(order);
 
-                <div className="relative flex-1 max-w-sm">
+        setIsDetailsOpen(true);
 
-                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+    };
 
-                    <Input placeholder="Search orders..." className="pl-9" />
+
+
+    return (
+
+        <div className="space-y-8">
+
+            <div className="flex items-center justify-between">
+
+                <div>
+
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Orders</h1>
+
+                    <p className="text-slate-500">Manage customer orders and transactions.</p>
 
                 </div>
 
-                <Button variant="outline" className="gap-2">
-
-                    <Filter className="w-4 h-4" />
-
-                    Status
-
-                </Button>
-
             </div>
 
-            
 
-            {loading ? (
 
-                <div className="p-12 flex justify-center">
+            <OrderDetailsDialog
 
-                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+                order={selectedOrder}
+
+                open={isDetailsOpen}
+
+                onOpenChange={setIsDetailsOpen}
+
+                onUpdate={fetchOrders}
+
+            />
+
+
+
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+
+                <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4">
+
+                    <div className="relative flex-1 max-w-sm">
+
+                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+
+                        <Input placeholder="Search orders..." className="pl-9" />
+
+                    </div>
+
+                    <Button variant="outline" className="gap-2">
+
+                        <Filter className="w-4 h-4" />
+
+                        Status
+
+                    </Button>
 
                 </div>
 
-            ) : (
 
-                <Table>
 
-                    <TableHeader>
+                {loading ? (
 
-                        <TableRow>
+                    <div className="p-12 flex justify-center">
 
-                            <TableHead>Order ID</TableHead>
+                        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
 
-                            <TableHead>Customer</TableHead>
+                    </div>
 
-                            <TableHead>Date</TableHead>
+                ) : (
 
-                            <TableHead>Total</TableHead>
-
-                            <TableHead>Status</TableHead>
-
-                            <TableHead className="text-right">Actions</TableHead>
-
-                        </TableRow>
-
-                    </TableHeader>
-
-                    <TableBody>
-
-                        {orders.length === 0 ? (
-
-                            <TableRow>
-
-                                <TableCell colSpan={6} className="text-center py-8 text-slate-500">
-
-                                    No orders found.
-
-                                </TableCell>
-
-                            </TableRow>
-
-                        ) : (
-
-                            orders.map((order) => (
-
-                                <TableRow key={order._id}>
-
-                                    <TableCell className="font-medium text-slate-900 dark:text-white text-xs">{order._id}</TableCell>
-
-                                    <TableCell>{order.user?.name || 'Guest'}</TableCell>
-
-                                    <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-
-                                    <TableCell>{formatPrice(order.totalPrice)}</TableCell>
-
-                                    <TableCell>
-
-                                        <Badge 
-
-                                            variant="secondary" 
-
-                                            className={`
-
-                                                capitalize
-
-                                                ${order.isPaid ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'}
-
-                                            `}
-
-                                        >
-
-                                            {order.isPaid ? 'Paid' : 'Pending'}
-
-                                        </Badge>
-
-                                    </TableCell>
-
-                                    <TableCell className="text-right">
-
-                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleView(order)}>
-
-                                            <Eye className="w-4 h-4" />
-
-                                        </Button>
-
-                                    </TableCell>
-
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Order ID</TableHead>
+                                    <TableHead>Customer</TableHead>
+                                    <TableHead>Date</TableHead>
+                                    <TableHead>Total</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {orders.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                                            No orders found.
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    orders.map((order) => (
+                                        <TableRow key={order._id}>
+                                            <TableCell className="font-medium text-slate-900 dark:text-white text-xs whitespace-nowrap">{order._id}</TableCell>
+                                            <TableCell className="whitespace-nowrap">{order.user?.name || 'Guest'}</TableCell>
+                                            <TableCell className="whitespace-nowrap">{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+                                            <TableCell className="whitespace-nowrap">{formatPrice(order.totalPrice)}</TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    variant="secondary"
+                                                    className={`
+                                                    capitalize whitespace-nowrap
+                                                    ${order.isPaid ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'}
+                                                `}
+                                                >
+                                                    {order.isPaid ? 'Paid' : 'Pending'}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleView(order)}>
+                                                    <Eye className="w-4 h-4" />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
 
-                            ))
+                )}
 
-                        )}
-
-                    </TableBody>
-
-                </Table>
-
-            )}
+            </div>
 
         </div>
 
-    </div>
-
-  );
+    );
 
 }
