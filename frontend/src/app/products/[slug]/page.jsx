@@ -1,51 +1,83 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useParams, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ProductDetails } from "@/components/ProductDetails";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { StarryBackground } from "@/components/StarryBackground";
 import api from "@/lib/api";
-import { Loader2 } from "lucide-react";
 
-export default function ProductPage() {
-  const { slug } = useParams();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const { data } = await api.get(`/products/${slug}`);
-        setProduct(data);
-      } catch (error) {
-        console.error("Product not found", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    if (slug) fetchProduct();
-  }, [slug]);
-
-  if (loading) {
-    return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        </div>
-    );
+// Fetch product data
+async function getProduct(slug) {
+  try {
+    const { data } = await api.get(`/products/${slug}`);
+    return data;
+  } catch (error) {
+    return null;
   }
+}
+
+// Generate Metadata
+export async function generateMetadata({ params }) {
+  const product = await getProduct(params.slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found | Honest Graphics & Printers",
+    };
+  }
+
+  return {
+    title: product.name,
+    description: product.description,
+    openGraph: {
+      title: `${product.name} | Honest Graphics & Printers`,
+      description: product.description,
+      images: [{ url: product.thumbnail }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: product.description,
+      images: [product.thumbnail],
+    },
+  };
+}
+
+export default async function ProductPage({ params }) {
+  const product = await getProduct(params.slug);
 
   if (!product) {
     return notFound();
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.thumbnail,
+    description: product.description,
+    sku: product.slug,
+    brand: {
+      '@type': 'Brand',
+      name: 'Honest Graphics & Printers',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `https://honestprinters.in/products/${product.slug}`,
+      priceCurrency: 'INR',
+      price: product.variants?.[0]?.price || 0,
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors selection:bg-indigo-500/30">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <StarryBackground />
       <Navbar />
-      <main className="relative pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="relative pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ProductDetails product={product} />
       </main>
       <Footer />

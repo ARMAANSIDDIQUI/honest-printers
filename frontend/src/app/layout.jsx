@@ -5,13 +5,72 @@ import { Toaster } from "sonner";
 import ClientProtection from "@/components/ClientProtection";
 import { StarryBackground } from "@/components/StarryBackground";
 import MeteorBackground from "@/components/MeteorBackground";
+import StructData from "@/components/StructData";
+
+export const viewport = {
+  themeColor: "#4f46e5",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // Often used in PWAs to feel native
+};
 
 export const metadata = {
-  title: "Honest Graphics & Printers | Digital, Screen & Offset Printing Services",
-  description: "Honest Graphics & Printers in Moradabad offers premium printing services: Flex Banners, Flyers, Posters, Visiting Cards, Envelopes, Calendars, Stickers, Bill Books, and Custom Graphic Design. Manufacturer of high-quality office stationery and marketing materials.",
-  keywords: "Honest Graphics & Printers, Moradabad printing, Flex printing, Vinyl printing, Visiting cards, Business cards, Flyers, Posters, Envelopes, Calendars, Bill books, Letterheads, Sticker printing, Offset printing, Screen printing, Digital printing, Custom graphic design, Wedding cards",
+  metadataBase: new URL('https://honestprinters.in'),
+  title: {
+    default: "Honest Graphics & Printers | Premium Printing Services in Moradabad",
+    template: "%s | Honest Graphics & Printers"
+  },
+  description: "Honest Graphics & Printers offers premium printing services in Moradabad: Flex Banners, Visiting Cards, Flyers, Bill Books, and Custom Graphic Design.",
+  keywords: ["Honest Graphics & Printers", "Moradabad printing", "Flex printing", "Business cards", "Flyers", "Posters", "Bill books", "Offset printing", "Digital printing", "Graphic design"],
+  authors: [{ name: "Honest Graphics & Printers" }],
+  creator: "Honest Graphics & Printers",
+  publisher: "Honest Graphics & Printers",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Honest Graphics & Printers | Premium Printing Services",
+    description: "Your go-to destination for high-quality printing and graphic design in Moradabad.",
+    url: 'https://honestprinters.in',
+    siteName: 'Honest Graphics & Printers',
+    images: [
+      {
+        url: '/og-image.jpg', // Ensure this file exists or add a placeholder task
+        width: 1200,
+        height: 630,
+        alt: 'Honest Graphics & Printers',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Honest Graphics & Printers",
+    description: "Premium printing and graphic design services in Moradabad.",
+    images: ['/og-image.jpg'], // Same image as OG
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: '/favicon.jpg',
+    shortcut: '/favicon.jpg',
+    apple: '/favicon.jpg',
   },
 };
 
@@ -22,6 +81,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <ClientProtection />
+        <StructData />
         <ReduxProvider>
           <ThemeProvider
             attribute="class"
